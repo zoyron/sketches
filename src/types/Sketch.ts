@@ -3,4 +3,5 @@ export interface Sketch {
   title: string;
   author: string;
   thumbnailURL: string;
+  sketchFunction: () => void;
 }
