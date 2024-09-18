@@ -10,9 +10,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
     <div>
       <h2>Sketches</h2>
       <ul>
-        <li>Sketch - 1</li>
-        <li>Sketch - 2</li>
-        <li>Sketch - 3</li>
+        {sketches.map((sketch) => (
+          <li key={sketch.id}>{sketch.title}</li>
+        ))}
       </ul>
     </div>
   );
