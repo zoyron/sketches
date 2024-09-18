@@ -1,34 +1,18 @@
 import React from "react";
-import { Sketch } from "../types/Sketch";
 import Sidebar from "./Sidebar";
 import SketchViewer from "./SketchViewer";
+import { useParams } from "react-router-dom";
+import sketches from "../data/sketches";
+import { Box } from "@mui/material";
 
 const GalleryPage: React.FC = () => {
-  const sketches: Sketch[] = [
-    {
-      id: 1,
-      title: "Sketch 1",
-      author: "Sagar",
-      thumbnailURL: "/sidebar/sparkles.png",
-    },
-    {
-      id: 2,
-      title: "Sketch 2",
-      author: "Sagar",
-      thumbnailURL: "/sidebar/sparkles.png",
-    },
-    {
-      id: 3,
-      title: "Sketch 3",
-      author: "Sagar",
-      thumbnailURL: "/sidebar/sparkles.png",
-    },
-  ];
+  const { sketchId } = useParams<{ sketchId: string }>();
+  const currentSketch = sketches.find((s) => s.id === sketchId) || sketches[0];
   return (
-    <div style={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }}>
       <Sidebar sketches={sketches} />
-      <SketchViewer sketch={sketches[0]} />
-    </div>
+      <SketchViewer sketch={currentSketch} />
+    </Box>
   );
 };
 

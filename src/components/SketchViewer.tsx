@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Sketch } from "../types/Sketch";
+import { Box, Typography } from "@mui/material";
 
 interface SketchViewerProps {
   sketch: Sketch;
 }
 
 const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
+      sketch.sketchFunction();
+    }
+  }, [sketch]);
+
   return (
-    <div style={{ flex: 1, padding: "20px" }}>
-      <h2>{sketch.title}</h2>
-      <p>sketch id is: {sketch.id}</p>
-      <p>Created by {sketch.author}</p>
-      <div
-        style={{ width: "100%", height: "400px", backgroundColor: "#f0f0f0" }}
-      >
-        Sketch will be rendered here.
-      </div>
-    </div>
+    <Box>
+      <Typography variant="h4">{sketch.title}</Typography>
+      <Typography variant="subtitle1"> by {sketch.author}</Typography>
+      <Box
+        ref={containerRef}
+        className="sketch-container"
+        sx={{ width: "100%", height: "calc(100vh - 200px)" }}
+      />
+    </Box>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Sketch } from "../types/Sketch";
 import { Drawer, List, ListItem } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface SidebarProps {
   sketches: Sketch[];
@@ -23,7 +24,11 @@ const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
       <h2 style={{ paddingLeft: "15px" }}>Sketches</h2>
       <List>
         {sketches.map((sketch) => (
-          <ListItem key={sketch.id}>
+          <ListItem
+            key={sketch.id}
+            component={Link}
+            to={`/sketch/${sketch.id}`}
+          >
             <img
               src={sketch.thumbnailURL}
               alt={sketch.title}
