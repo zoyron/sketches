@@ -1,5 +1,5 @@
 export interface Sketch {
-  id: number;
+  id: string;
   title: string;
   author: string;
   thumbnailURL: string;
