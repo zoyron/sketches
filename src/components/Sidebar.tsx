@@ -5,7 +5,7 @@ interface SidebarProps {
   sketches: Sketch[];
 }
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
   return (
     <div>
       <h2>Sketches</h2>
