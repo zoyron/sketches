@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import SketchViewer from "./SketchViewer";
 import { useParams } from "react-router-dom";
-import sketches from "../data/sketches";
+import sketches from "../data";
 import { Box } from "@mui/material";
 
 const GalleryPage: React.FC = () => {
