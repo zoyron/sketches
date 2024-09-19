@@ -5,15 +5,11 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import GalleryPage from "./components/GalleryPage";
-
-const theme = createTheme();
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <div className="min-h-screen bg-gray-100 text-gray-900">
       <Router>
         <Routes>
           <Route path="/sketch/:sketchId" element={<GalleryPage />} />
@@ -23,7 +19,7 @@ const App: React.FC = () => {
           />
         </Routes>
       </Router>
-    </ThemeProvider>
+    </div>
   );
 };
 
