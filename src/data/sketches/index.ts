@@ -1,9 +1,10 @@
 import { Sketch } from "../../types/Sketch";
 import RotatingCube from "./RotatingCube";
+import RotatingSphere from "./RotatingSphere";
 
 // rotating cube is an object that we imported
 // here we will be creating an array of objects
-const sketches: Sketch[] = [RotatingCube];
+const sketches: Sketch[] = [RotatingCube, RotatingSphere];
 
 export default sketches;
 

@@ -2,11 +2,11 @@ import * as THREE from "three";
 import { Sketch } from "../../types/Sketch";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-const RotatingCube: Sketch = {
-  id: "1",
-  title: "Rotating Cube",
+const RotatingSphere: Sketch = {
+  id: "2",
+  title: "Rotating Sphere",
   author: "Sagar",
-  thumbnailURL: "/sidebar/cube.png",
+  thumbnailURL: "/sidebar/sphere.png",
   sketchFunction: () => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -32,10 +32,10 @@ const RotatingCube: Sketch = {
     controls.enableDamping = true; // Add smooth damping effect
     controls.dampingFactor = 0.05;
 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x0080fa });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const geometry = new THREE.IcosahedronGeometry(2, 16);
+    const material = new THREE.MeshNormalMaterial({ wireframe: true });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
 
     camera.position.z = 5;
 
@@ -56,8 +56,7 @@ const RotatingCube: Sketch = {
       controls.update();
 
       // Rotate cube (optional, remove if you want to control rotation only with OrbitControls)
-      cube.rotation.x += 0.005;
-      cube.rotation.y += 0.005;
+      sphere.rotation.y += 0.005;
 
       renderer.render(scene, camera);
     }
@@ -73,4 +72,4 @@ const RotatingCube: Sketch = {
   },
 };
 
-export default RotatingCube;
+export default RotatingSphere;

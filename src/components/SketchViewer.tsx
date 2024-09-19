@@ -23,7 +23,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
       <Box
         ref={containerRef}
         className="sketch-container"
-        sx={{ width: "100%", height: "calc(100vh - 200px)" }}
+        sx={{ width: "100%", height: "100%" }}
       />
     </Box>
   );
