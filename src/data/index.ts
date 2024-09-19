@@ -1,6 +1,7 @@
 import { Sketch } from "../types/Sketch";
 import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
+import RotatingTorus from "./sketches/RotatingRing";
 
 const sketches: Sketch[] = [
   {
@@ -16,6 +17,13 @@ const sketches: Sketch[] = [
     author: "Sarlloc",
     thumbnailURL: "/sidebar/sphere.png",
     component: RotatingSphere,
+  },
+  {
+    id: "3",
+    title: "Rotating Torus",
+    author: "Sagar Arora",
+    thumbnailURL: "/sidebar/torus.png",
+    component: RotatingTorus,
   },
 ];
 

@@ -1,15 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-const RotatingCube: React.FC = () => {
+const RotatingTorus: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0080fa);
+    scene.background = new THREE.Color(0x69803a);
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -22,22 +21,19 @@ const RotatingCube: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
+    const geometry = new THREE.TorusGeometry(1.25, 0.5, 24, 64);
     const material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
+      color: 0x000,
       wireframe: true,
     });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
 
     camera.position.z = 5;
 
-    const controls = new OrbitControls(camera, renderer.domElement);
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      controls.update();
+      mesh.rotation.y += 0.01;
       renderer.render(scene, camera);
     };
 
@@ -51,4 +47,4 @@ const RotatingCube: React.FC = () => {
   return <div ref={mountRef} />;
 };
 
-export default RotatingCube;
+export default RotatingTorus;

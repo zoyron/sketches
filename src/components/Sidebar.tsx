@@ -29,11 +29,15 @@ const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
             component={Link}
             to={`/sketch/${sketch.id}`}
           >
-            <img
-              src={sketch.thumbnailURL}
-              alt={sketch.title}
-              style={{ width: "90%", height: "90%" }}
-            />
+            <div>
+              <img
+                src={sketch.thumbnailURL}
+                alt={sketch.title}
+                style={{ width: "90%", height: "90%" }}
+              />
+              {sketch.title}
+              <hr />
+            </div>
           </ListItem>
         ))}
       </List>
