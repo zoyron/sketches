@@ -9,7 +9,9 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
   return (
     <div className="w-72 h-full bg-gray-800 text-white overflow-y-auto">
-      <h2 className="text-2xl font-bold p-6 bg-gray-900">Sketches</h2>
+      <h2 className="text-4xl font-bold p-6 bg-gray-800 text-center">
+        Sketches
+      </h2>
       <ul className="p-4 space-y-4">
         {sketches.map((sketch) => (
           <li key={sketch.id}>
