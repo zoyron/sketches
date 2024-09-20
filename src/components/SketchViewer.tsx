@@ -7,12 +7,9 @@ interface SketchViewerProps {
 
 const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
   const SketchComponent = sketch.component;
-
   return (
-    <div className="h-full flex flex-col overflow-hidden">
-      <div className="flex-grow overflow-hidden flex justify-center items-center bg-white">
-        <SketchComponent />
-      </div>
+    <div className="w-full h-full flex justify-center items-center">
+      <SketchComponent />
     </div>
   );
 };

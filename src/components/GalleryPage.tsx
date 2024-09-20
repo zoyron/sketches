@@ -10,8 +10,10 @@ const GalleryPage: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar sketches={sketches} />
-      <div className="flex-grow overflow-hidden bg-white  shadow-xl">
+      <div className="w-72 flex-shrink-0">
+        <Sidebar sketches={sketches} />
+      </div>
+      <div className="flex-grow overflow-hidden bg-white shadow-xl flex justify-center items-center">
         <SketchViewer sketch={currentSketch} />
       </div>
     </div>
