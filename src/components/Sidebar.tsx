@@ -8,16 +8,14 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ sketches }) => {
   return (
-    <div className="w-72 h-full bg-gray-800 text-white overflow-y-auto">
-      <h2 className="text-4xl font-bold p-6 bg-gray-800 text-center">
-        Sketches
-      </h2>
+    <div className="h-full bg-[#16213E] text-white overflow-y-auto">
+      <h3 className="text-4xl font-bold mt-8  text-center">Sketches</h3>
       <ul className="p-4 space-y-4">
         {sketches.map((sketch) => (
           <li key={sketch.id}>
             <Link
               to={`/sketch/${sketch.id}`}
-              className="block bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="block bg-[#0F3460] rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <img
                 src={sketch.thumbnailURL}

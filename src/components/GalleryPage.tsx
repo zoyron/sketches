@@ -10,7 +10,9 @@ const GalleryPage: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-72 flex-shrink-0">
+      <div className="w-84 flex-shrink-0">
+        {" "}
+        {/* Width defined here */}
         <Sidebar sketches={sketches} />
       </div>
       <div className="flex-grow overflow-hidden bg-white shadow-xl flex justify-center items-center">

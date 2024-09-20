@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const RotatingSphere: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -8,6 +9,7 @@ const RotatingSphere: React.FC = () => {
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#1A1A2E");
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -30,9 +32,12 @@ const RotatingSphere: React.FC = () => {
 
     camera.position.z = 5;
 
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDampning = true;
     const animate = () => {
       requestAnimationFrame(animate);
       mesh.rotation.y += 0.01;
+      controls.update();
       renderer.render(scene, camera);
     };
 

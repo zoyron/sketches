@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const RotatingTorus: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -8,7 +9,7 @@ const RotatingTorus: React.FC = () => {
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x69803a);
+    scene.background = new THREE.Color("#1A1A2E");
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -23,13 +24,17 @@ const RotatingTorus: React.FC = () => {
 
     const geometry = new THREE.TorusGeometry(1.25, 0.5, 24, 64);
     const material = new THREE.MeshBasicMaterial({
-      color: 0x000,
+      color: "#8000fa",
       wireframe: true,
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
     camera.position.z = 5;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
 
     const animate = () => {
       requestAnimationFrame(animate);

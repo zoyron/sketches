@@ -7,31 +7,31 @@ import SparklingParticles from "./sketches/SparklingParticles";
 const sketches: Sketch[] = [
   {
     id: "1",
-    title: "Rotating Cube",
+    title: " Sparkling Particles",
     author: "Sagar",
-    thumbnailURL: "/sidebar/cube.png",
-    component: RotatingCube,
+    thumbnailURL: "/sidebar/particles.png",
+    component: SparklingParticles,
   },
   {
     id: "2",
-    title: "Rotating Sphere",
+    title: "Icosahedron",
     author: "Sarlloc",
     thumbnailURL: "/sidebar/sphere.png",
     component: RotatingSphere,
   },
   {
     id: "3",
-    title: "Rotating Torus",
+    title: "Wireframed Torus",
     author: "Sagar Arora",
     thumbnailURL: "/sidebar/torus.png",
     component: RotatingTorus,
   },
   {
     id: "4",
-    title: " Sparkling Particles",
+    title: "Rotating Cube",
     author: "Sagar",
-    thumbnailURL: "/sidebar/particles.png",
-    component: SparklingParticles,
+    thumbnailURL: "/sidebar/cube.png",
+    component: RotatingCube,
   },
 ];
 

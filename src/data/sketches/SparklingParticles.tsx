@@ -62,7 +62,7 @@ const Particles = ({ count = 50000 }) => {
 
 const SparklingParticles: React.FC = () => {
   return (
-    <Canvas camera={{ position: [0, 0, 5] }}>
+    <Canvas camera={{ position: [0, 5, 5] }}>
       <color attach="background" args={["black"]} />
       <Particles />
       <OrbitControls />
