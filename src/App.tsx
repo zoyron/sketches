@@ -9,7 +9,7 @@ import GalleryPage from "./components/GalleryPage";
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900">
       <Router>
         <Routes>
           <Route path="/sketch/:sketchId" element={<GalleryPage />} />
