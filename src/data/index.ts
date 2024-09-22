@@ -7,6 +7,13 @@ import Galaxy from "./sketches/krishnaGalaxy/Galaxy";
 
 const sketches: Sketch[] = [
   {
+    id: "0",
+    title: "Galaxy",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/galaxy.png",
+    component: Galaxy,
+  },
+  {
     id: "1",
     title: " Sparkling Particles",
     author: "Sagar",
@@ -33,13 +40,6 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/cube.png",
     component: RotatingCube,
-  },
-  {
-    id: "5",
-    title: "Galaxy",
-    author: "Sagar",
-    thumbnailURL: "/sidebar/particles.png",
-    component: Galaxy,
   },
 ];
 
