@@ -3,6 +3,7 @@ import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
 import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
+import Galaxy from "./sketches/krishnaGalaxy/Galaxy";
 
 const sketches: Sketch[] = [
   {
@@ -32,6 +33,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/cube.png",
     component: RotatingCube,
+  },
+  {
+    id: "5",
+    title: "Galaxy",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/particles.png",
+    component: Galaxy,
   },
 ];
 
