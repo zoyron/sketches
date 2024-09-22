@@ -3,7 +3,7 @@ import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
 import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
-import Galaxy from "./sketches/krishnaGalaxy/Galaxy";
+import Galaxy from "./sketches/galaxy/Galaxy";
 
 const sketches: Sketch[] = [
   {
