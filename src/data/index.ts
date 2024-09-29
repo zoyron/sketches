@@ -1,9 +1,9 @@
 import { Sketch } from "../types/Sketch";
+import Galaxy from "./sketches/galaxy/Galaxy";
 import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
 import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
-import Galaxy from "./sketches/galaxy/Galaxy";
 
 const sketches: Sketch[] = [
   {

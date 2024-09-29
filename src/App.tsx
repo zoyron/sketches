@@ -15,7 +15,7 @@ const App: React.FC = () => {
           <Route path="/sketch/:sketchId" element={<GalleryPage />} />
           <Route
             path="/"
-            element={<Navigate to="/sketch/rotating-cube" replace />}
+            element={<Navigate to="/sketch/galaxy" replace />}
           />
         </Routes>
       </Router>
