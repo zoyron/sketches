@@ -7,35 +7,35 @@ import Galaxy from "./sketches/galaxy/Galaxy";
 
 const sketches: Sketch[] = [
   {
-    id: "0",
+    id: "galaxy",
     title: "Galaxy",
     author: "Sagar",
     thumbnailURL: "/sidebar/galaxy.png",
     component: Galaxy,
   },
   {
-    id: "1",
-    title: " Sparkling Particles",
+    id: "sparkling-particles",
+    title: "Sparkling Particles",
     author: "Sagar",
     thumbnailURL: "/sidebar/particles.png",
     component: SparklingParticles,
   },
   {
-    id: "2",
+    id: "icosahedron",
     title: "Icosahedron",
     author: "Sarlloc",
     thumbnailURL: "/sidebar/sphere.png",
     component: RotatingSphere,
   },
   {
-    id: "3",
+    id: "torus",
     title: "Wireframed Torus",
     author: "Sagar Arora",
     thumbnailURL: "/sidebar/torus.png",
     component: RotatingTorus,
   },
   {
-    id: "4",
+    id: "rotating-cube",
     title: "Rotating Cube",
     author: "Sagar",
     thumbnailURL: "/sidebar/cube.png",
