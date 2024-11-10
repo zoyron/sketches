@@ -4,8 +4,16 @@ import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
 import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
+import HomePage from "./sketches/HomePage";
 
 const sketches: Sketch[] = [
+  {
+    id: "homepage",
+    title: "Welcome",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/welcome.png",
+    component: HomePage,
+  },
   {
     id: "galaxy",
     title: "Galaxy",
