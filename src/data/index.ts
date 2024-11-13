@@ -42,13 +42,6 @@ const sketches: Sketch[] = [
     thumbnailURL: "/sidebar/particles.png",
     component: SparklingParticles,
   },
-  {
-    id: "icosahedron",
-    title: "Icosahedron",
-    author: "Sarlloc",
-    thumbnailURL: "/sidebar/sphere.png",
-    component: RotatingSphere,
-  },
 ];
 
 export default sketches;
