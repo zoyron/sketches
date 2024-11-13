@@ -1,11 +1,10 @@
 import { Sketch } from "../types/Sketch";
 import Galaxy from "./sketches/galaxy/Galaxy";
-import RotatingCube from "./sketches/RotatingCube";
 import RotatingSphere from "./sketches/RotatingSphere";
-import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
 import HomePage from "./sketches/HomePage";
 import InteractiveCubes from "./sketches/InteractiveCubes";
+import EarthSphere from "./sketches/blobbyEarth/Earth";
 
 const sketches: Sketch[] = [
   {
@@ -21,6 +20,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/interactiveCubes.png",
     component: InteractiveCubes,
+  },
+  {
+    id: "blobby-earth",
+    title: "Blobby Earth",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/interactiveCubes.png",
+    component: EarthSphere,
   },
   {
     id: "galaxy",

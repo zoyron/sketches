@@ -2,68 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
-// import galaxyVertexShader from "./vertex.glsl";
-// import galaxyFragmentShader from "./fragment.glsl";
-
-// Import shaders as strings
-const galaxyVertexShader = `
-uniform float uTime;
-uniform float uSize;
-attribute float aScale;
-attribute vec3 aRandom;
-varying vec3 vColor;
-
-void main() {
-  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-  // spin
-  float angle = atan(modelPosition.x, modelPosition.z);
-  float distanceToCenter = length(modelPosition.xz);
-  float offSetAngle = (1.0 / distanceToCenter) * uTime * 0.25;
-  angle += offSetAngle;
-  modelPosition.x = cos(angle) * distanceToCenter;
-  modelPosition.z = sin(angle) * distanceToCenter;
-
-  // adding randomness to the galaxy
-  modelPosition.xyz += aRandom;
-
-  vec4 viewPosition = viewMatrix * modelPosition;
-  vec4 projectedPosition = projectionMatrix * viewPosition;
-  gl_Position = projectedPosition;
-
-  // size of the particles
-  gl_PointSize = uSize * aScale;
-  
-  // applying the particle attenuation formula
-  gl_PointSize *= (1.0 / - viewPosition.z);
-
-  // varying color
-  vColor = color;
-}
-
-`;
-
-const galaxyFragmentShader = `
-varying vec3 vColor;
-
-void main() {
-  float strength = distance(gl_PointCoord, vec2(0.5));
-
-  // difused disc
-  //strength *= 2.0;
-  //strength = 1.0 - strength;
-
-  // Light point using pow method
-  strength = 1.0 - strength;
-  strength = pow(strength, 10.0);
-
-  // final 
-  vec3 color = mix(vec3(0.0), vColor, vec3(strength));
-
-  gl_FragColor = vec4(color, 1.0);
-  #include <colorspace_fragment>
-}
-
-`;
+import galaxyVertexShader from "./vertex.glsl";
+import galaxyFragmentShader from "./fragment.glsl";
 
 interface GalaxyParameters {
   count: number;

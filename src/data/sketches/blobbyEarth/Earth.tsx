@@ -46,7 +46,7 @@ const EarthSphere: React.FC = () => {
 
     // Texture Loader
     const textureLoader = new THREE.TextureLoader();
-    const perlinTexture = textureLoader.load("/earthmap1k.jpg");
+    const perlinTexture = textureLoader.load("./static/earthmap1k.jpg");
 
     // Mesh
     const geometry = new THREE.IcosahedronGeometry(2, 30);

@@ -7,7 +7,7 @@ import glsl from "vite-plugin-glsl";
 export default defineConfig({
   plugins: [
     react(),
-    restart({ restart: ["../static/**"] }), // Restart server on static file change
+    restart({ restart: ["./static/**"] }), // Restart server on static file change
     glsl(), // Handle shader files
   ],
   optimizeDeps: {
