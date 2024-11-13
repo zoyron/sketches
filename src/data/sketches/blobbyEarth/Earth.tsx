@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import vertexShader from "./vertex.glsl";
 import fragmentShader from "./fragment.glsl";
+import earthmapTexture from "./earthmap1k.jpg";
 
 const EarthSphere: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -46,7 +47,7 @@ const EarthSphere: React.FC = () => {
 
     // Texture Loader
     const textureLoader = new THREE.TextureLoader();
-    const perlinTexture = textureLoader.load("./static/earthmap1k.jpg");
+    const perlinTexture = textureLoader.load(earthmapTexture);
 
     // Mesh
     const geometry = new THREE.IcosahedronGeometry(2, 30);
