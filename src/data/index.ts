@@ -15,18 +15,18 @@ const sketches: Sketch[] = [
     component: HomePage,
   },
   {
+    id: "blobby-earth",
+    title: "Blobby Earth",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/blobbyEarth.png",
+    component: EarthSphere,
+  },
+  {
     id: "cubes",
     title: "Interactive Cubes",
     author: "Sagar",
     thumbnailURL: "/sidebar/interactiveCubes.png",
     component: InteractiveCubes,
-  },
-  {
-    id: "blobby-earth",
-    title: "Blobby Earth",
-    author: "Sagar",
-    thumbnailURL: "/sidebar/interactiveCubes.png",
-    component: EarthSphere,
   },
   {
     id: "galaxy",
