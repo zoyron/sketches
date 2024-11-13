@@ -43,20 +43,6 @@ const sketches: Sketch[] = [
     thumbnailURL: "/sidebar/sphere.png",
     component: RotatingSphere,
   },
-  {
-    id: "torus",
-    title: "Wireframed Torus",
-    author: "Sagar Arora",
-    thumbnailURL: "/sidebar/torus.png",
-    component: RotatingTorus,
-  },
-  {
-    id: "rotating-cube",
-    title: "Rotating Cube",
-    author: "Sagar",
-    thumbnailURL: "/sidebar/cube.png",
-    component: RotatingCube,
-  },
 ];
 
 export default sketches;
