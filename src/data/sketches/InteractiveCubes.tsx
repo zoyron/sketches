@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-// import { RoundedBoxGeometry } from "three/examples/jsm/Addons.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 
 const InteractiveCubes: React.FC = () => {
