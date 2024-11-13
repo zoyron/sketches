@@ -19,7 +19,7 @@ interface GalaxyParameters {
 
 const Galaxy: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [parameters, setParameters] = useState<GalaxyParameters>({
+  const [parameters] = useState<GalaxyParameters>({
     count: 50000,
     size: 0.005,
     radius: 5,
