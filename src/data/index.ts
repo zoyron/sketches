@@ -5,6 +5,7 @@ import RotatingSphere from "./sketches/RotatingSphere";
 import RotatingTorus from "./sketches/RotatingRing";
 import SparklingParticles from "./sketches/SparklingParticles";
 import HomePage from "./sketches/HomePage";
+import InteractiveCubes from "./sketches/InteractiveCubes";
 
 const sketches: Sketch[] = [
   {
@@ -13,6 +14,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/welcome.png",
     component: HomePage,
+  },
+  {
+    id: "cubes",
+    title: "Interactive Cubes",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/interactiveCubes.png",
+    component: InteractiveCubes,
   },
   {
     id: "galaxy",
