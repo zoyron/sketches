@@ -58,7 +58,7 @@ const InteractiveCubes: React.FC = () => {
 
     // Create cubes
     const geometry = new RoundedBoxGeometry(1, 1, 1, 2, 0.15);
-    const material = new THREE.MeshLambertMaterial();
+    const material = new THREE.MeshLambertMaterial({ color: 0xffffff });
     const center = stride / 2;
 
     for (let x = 0; x < stride; x++) {
@@ -72,6 +72,7 @@ const InteractiveCubes: React.FC = () => {
           );
           cube.position.copy(position);
           cube.userData.originalPosition = position.clone();
+          cube.userData.material = cube.material;
           cube.castShadow = true;
           cube.receiveShadow = true;
           scene.add(cube);
@@ -121,12 +122,9 @@ const InteractiveCubes: React.FC = () => {
         const col = Math.max(0.5, distInv) / 1.5;
 
         if (dist > displacement * 1.1) {
-          cube.material.color.lerp(new THREE.Color("white"), 0.1);
+          cube.userData.material.color.setRGB(1, 1, 1);
         } else {
-          cube.material.color.lerp(
-            new THREE.Color(col / 2, col * 2, col * 4),
-            0.2
-          );
+          cube.userData.material.color.setRGB(col / 2, col * 2, col * 4);
         }
 
         if (dist > displacement) {

@@ -1,6 +1,5 @@
 import { Sketch } from "../types/Sketch";
 import Galaxy from "./sketches/galaxy/Galaxy";
-import RotatingSphere from "./sketches/RotatingSphere";
 import SparklingParticles from "./sketches/SparklingParticles";
 import HomePage from "./sketches/HomePage";
 import InteractiveCubes from "./sketches/InteractiveCubes";
