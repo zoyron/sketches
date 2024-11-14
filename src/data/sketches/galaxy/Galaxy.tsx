@@ -155,7 +155,6 @@ const Galaxy: React.FC = () => {
       .onChange(generateGalaxy);
     gui.addColor(parameters, "insideColor").onChange(generateGalaxy);
     gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
-    gui.close();
 
     // Resize handler
     const handleResize = () => {
