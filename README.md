@@ -1,50 +1,25 @@
-# React + TypeScript + Vite
+# Threejs Sketches
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+I like making threejs sketches and showing them to people on the internet, but there was no one place where I can collect them all.
 
-Currently, two official plugins are available:
+So, here I present to you all my dumping ground for threejs sketches.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Visit the site [here](https://sketches-sarlloc.vercel.app).
 
-## Expanding the ESLint configuration
+This project is made using typescript. But the sketches use a lot of glsl as well. 
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### The current few sketches are:
 
-- Configure the top-level `parserOptions` property like this:
+> Will keep adding more and more with time.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. [Blobby Earth](https://sketches-sarlloc.vercel.app/sketch/blobby-earth)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+![Blobby Earth](./public/sidebar/blobbyEarth.png)
+___
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. [Interactive Cubes](https://sketches-sarlloc.vercel.app/sketch/cubes)
+![Interactive Cubes](./public/sidebar/interactiveCubes.png)
+___
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+3. [Galaxy](https://sketches-sarlloc.vercel.app/sketch/galaxy)
+![Galaxy](./public/sidebar/galaxy.png)
