@@ -18,8 +18,10 @@ This project is made using typescript. But the sketches use a lot of glsl as wel
 ___
 
 2. [Interactive Cubes](https://sketches-sarlloc.vercel.app/sketch/cubes)
+
 ![Interactive Cubes](./public/sidebar/interactiveCubes.png)
 ___
 
 3. [Galaxy](https://sketches-sarlloc.vercel.app/sketch/galaxy)
+
 ![Galaxy](./public/sidebar/galaxy.png)
