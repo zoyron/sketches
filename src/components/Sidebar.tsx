@@ -1,6 +1,3 @@
-{
-  /* Sidebar.tsx */
-}
 import React from "react";
 import { Sketch } from "../types/Sketch";
 import { Link } from "react-router-dom";

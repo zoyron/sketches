@@ -51,7 +51,7 @@ const InteractiveEarth: React.FC = () => {
     const alphaMap = textureLoader.load(alphaMap1);
 
     // Inner Wiring
-    const radius = 3;
+    const radius = 2;
     const geo = new THREE.IcosahedronGeometry(radius, 8);
     const mat = new THREE.MeshBasicMaterial({
       color: 0x00004b,
@@ -63,7 +63,7 @@ const InteractiveEarth: React.FC = () => {
     scene.add(innerWire);
 
     // Points Material (Earth)
-    const vert = 100;
+    const vert = 125;
     const geometry = new THREE.IcosahedronGeometry(radius, vert);
     const material = new THREE.ShaderMaterial({
       uniforms: {

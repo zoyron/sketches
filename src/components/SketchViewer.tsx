@@ -1,6 +1,3 @@
-{
-  /* SketchViewer.tsx */
-}
 import React from "react";
 import { Sketch } from "../types/Sketch";
 
