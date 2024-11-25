@@ -4,6 +4,7 @@ import SparklingParticles from "./sketches/SparklingParticles";
 import HomePage from "./sketches/HomePage";
 import InteractiveCubes from "./sketches/InteractiveCubes";
 import EarthSphere from "./sketches/blobbyEarth/Earth";
+import InteractiveEarth from "./sketches/particlesEarth/InteractiveEarth";
 
 const sketches: Sketch[] = [
   {
@@ -26,6 +27,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/interactiveCubes.png",
     component: InteractiveCubes,
+  },
+  {
+    id: "interactive-earth",
+    title: "Interactive Earth",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/interactiveEarth.png",
+    component: InteractiveEarth,
   },
   {
     id: "galaxy",
