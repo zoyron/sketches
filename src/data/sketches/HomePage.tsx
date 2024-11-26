@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
             GitHub
           </a>
           <a
-            href="buymeacoffee.com/sarlloc"
+            href="https://buymeacoffee.com/sarlloc"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-[#E94560] hover:text-white transition-colors duration-300"
