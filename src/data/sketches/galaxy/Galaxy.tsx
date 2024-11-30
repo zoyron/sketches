@@ -23,12 +23,12 @@ const Galaxy: React.FC = () => {
     count: 50000,
     size: 0.005,
     radius: 5,
-    branches: 3,
+    branches: 4,
     spin: 1,
     randomness: 0.5,
     randomnessPower: 3,
-    insideColor: "#ff6030",
-    outsideColor: "#1b3984",
+    insideColor: "#fa8500",
+    outsideColor: "#05acff",
   });
 
   useEffect(() => {
