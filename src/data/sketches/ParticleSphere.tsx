@@ -70,7 +70,7 @@ const ParticleSphere: React.FC = () => {
       );
 
       const material = new THREE.PointsMaterial({
-        size: 0.05,
+        size: 0.06,
         color: new THREE.Color(0x00ffff),
         transparent: true,
         blending: THREE.AdditiveBlending,
@@ -125,6 +125,7 @@ const ParticleSphere: React.FC = () => {
 
       // Add rotation to particles and wireframe
       particles.rotation.y += 0.001;
+      particles.rotation.x -= 0.001;
       wireframe.rotation.y += 0.001;
 
       const positions = particles.geometry.attributes.position
@@ -147,9 +148,9 @@ const ParticleSphere: React.FC = () => {
           z * noiseScale + time * timeScale,
         );
 
-        velocities[i3] += noise * 0.001;
-        velocities[i3 + 1] += noise * 0.001;
-        velocities[i3 + 2] += noise * 0.001;
+        velocities[i3] += noise * 0.003;
+        velocities[i3 + 1] += noise * 0.003;
+        velocities[i3 + 2] += noise * 0.003;
 
         // Update positions
         positions[i3] += velocities[i3];
