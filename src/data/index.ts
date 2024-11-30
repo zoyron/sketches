@@ -5,6 +5,7 @@ import HomePage from "./sketches/HomePage";
 import InteractiveCubes from "./sketches/InteractiveCubes";
 import EarthSphere from "./sketches/blobbyEarth/Earth";
 import InteractiveEarth from "./sketches/particlesEarth/InteractiveEarth";
+import ParticleSphere from "./sketches/ParticleSphere";
 
 const sketches: Sketch[] = [
   {
@@ -20,6 +21,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/blobbyEarth.png",
     component: EarthSphere,
+  },
+  {
+    id: "particle-sphere",
+    title: "Particle Sphere",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/particleSphere.png",
+    component: ParticleSphere,
   },
   {
     id: "cubes",
