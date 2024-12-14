@@ -130,12 +130,10 @@ const Neurons: React.FC = () => {
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
 
-    const clock = new THREE.Clock();
 
     const animate = () => {
       requestAnimationFrame(animate);
 
-      const time = clock.getElapsedTime();
       const positions = geometry.attributes.position.array;
       let lineIndex = 0;
 
