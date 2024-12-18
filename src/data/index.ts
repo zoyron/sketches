@@ -25,18 +25,18 @@ const sketches: Sketch[] = [
     component: EarthSphere,
   },
   {
-    id: "sparkling-sphere",
-    title: "Sparkling Sphere",
-    author: "Sagar",
-    thumbnailURL: "/sidebar/neurons.png",
-    component: SparklingSphere,
-  },
-  {
     id: "neurons",
     title: "Neurons",
     author: "Sagar",
     thumbnailURL: "/sidebar/neurons.png",
     component: Neurons,
+  },
+  {
+    id: "sparkling-sphere",
+    title: "Sparkling Sphere",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/sparklingSphere.png",
+    component: SparklingSphere,
   },
   {
     id: "particle-sphere",

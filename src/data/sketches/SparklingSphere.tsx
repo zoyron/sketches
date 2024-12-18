@@ -14,17 +14,17 @@ const SparklingSphere: React.FC = () => {
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
-    
+
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true
+      alpha: true,
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 1);
@@ -47,7 +47,7 @@ const SparklingSphere: React.FC = () => {
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       1.5,
       0.4,
-      0.1
+      0.1,
     );
     composer.addPass(bloomPass);
 
@@ -79,16 +79,12 @@ const SparklingSphere: React.FC = () => {
     // Create particles
     const createParticles = () => {
       const particles = [];
-      const count = 5000;
+      const count = 2500;
       const radius = 2;
 
-      const geometry = new THREE.SphereGeometry(0.015, 12, 12);
+      const geometry = new THREE.SphereGeometry(0.015, 6, 6);
 
-      const colors = [
-        0x88ccff,
-        0x7dabf1,
-        0x6a8dff
-      ];
+      const colors = [0x88ccff, 0x7dabf1, 0x6a8dff];
 
       for (let i = 0; i < count; i++) {
         const theta = Math.random() * Math.PI * 2;
@@ -106,7 +102,7 @@ const SparklingSphere: React.FC = () => {
           emissiveMap: null,
           metalness: 0.5,
           roughness: 0.2,
-          toneMapped: false
+          toneMapped: false,
         });
 
         const mesh = new THREE.Mesh(geometry, material);
@@ -121,7 +117,7 @@ const SparklingSphere: React.FC = () => {
           velocity: new THREE.Vector3(),
           quaternion: new THREE.Quaternion(),
           baseColor: new THREE.Color(baseColor),
-          currentIntensity: baseGlowIntensity
+          currentIntensity: baseGlowIntensity,
         });
       }
 
@@ -137,7 +133,7 @@ const SparklingSphere: React.FC = () => {
       const mousePosition3D = new THREE.Vector3();
       raycaster.ray.intersectPlane(intersectPlane, mousePosition3D);
 
-      particles.forEach(particle => {
+      particles.forEach((particle) => {
         const distanceToMouse = mousePosition3D.distanceTo(particle.position);
         const isInRange = distanceToMouse < interactionRadius;
 
@@ -146,27 +142,34 @@ const SparklingSphere: React.FC = () => {
           : 0;
 
         if (isInRange) {
-          const repulsionDir = particle.position.clone()
+          const repulsionDir = particle.position
+            .clone()
             .sub(mousePosition3D)
             .normalize();
 
           particle.velocity.add(
-            repulsionDir.multiplyScalar(force * (1 + Math.random() * 0.2))
+            repulsionDir.multiplyScalar(force * (1 + Math.random() * 0.2)),
           );
 
           const intensity = THREE.MathUtils.lerp(
             maxGlowIntensity,
             baseGlowIntensity,
-            distanceToMouse / interactionRadius
+            distanceToMouse / interactionRadius,
           );
 
-          const glowColor = particle.baseColor.clone().multiplyScalar(intensity);
+          const glowColor = particle.baseColor
+            .clone()
+            .multiplyScalar(intensity);
           particle.mesh.material.emissive = glowColor;
         } else {
-          particle.mesh.material.emissive = particle.baseColor.clone().multiplyScalar(baseGlowIntensity);
+          particle.mesh.material.emissive = particle.baseColor
+            .clone()
+            .multiplyScalar(baseGlowIntensity);
         }
 
-        const distanceToOrigin = particle.position.distanceTo(particle.originalPosition);
+        const distanceToOrigin = particle.position.distanceTo(
+          particle.originalPosition,
+        );
         const returnForceVector = particle.originalPosition
           .clone()
           .sub(particle.position)
@@ -182,7 +185,7 @@ const SparklingSphere: React.FC = () => {
         if (particle.velocity.length() > 0.001) {
           particle.quaternion.setFromUnitVectors(
             new THREE.Vector3(0, 1, 0),
-            particle.velocity.clone().normalize()
+            particle.velocity.clone().normalize(),
           );
           particle.mesh.quaternion.slerp(particle.quaternion, 0.1);
         }
@@ -214,16 +217,16 @@ const SparklingSphere: React.FC = () => {
     };
 
     // Add event listeners
-    window.addEventListener('resize', handleWindowResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("resize", handleWindowResize);
+    window.addEventListener("mousemove", handleMouseMove);
 
     // Start animation
     animate();
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("resize", handleWindowResize);
+      window.removeEventListener("mousemove", handleMouseMove);
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, []);
