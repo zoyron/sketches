@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 const SparklingSphere: React.FC = () => {
@@ -40,7 +40,7 @@ const SparklingSphere: React.FC = () => {
 
     // Post-processing setup
     const composer = new EffectComposer(renderer);
-    const renderPass = new RenderPass.RenderPass(scene, camera);
+    const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 
     const bloomPass = new UnrealBloomPass(
