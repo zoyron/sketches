@@ -7,6 +7,7 @@ import EarthSphere from "./sketches/blobbyEarth/Earth";
 import InteractiveEarth from "./sketches/particlesEarth/InteractiveEarth";
 import ParticleSphere from "./sketches/ParticleSphere";
 import Neurons from "./sketches/Neurons";
+import SparklingSphere from "./sketches/SparklingSphere";
 
 const sketches: Sketch[] = [
   {
@@ -22,6 +23,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/blobbyEarth.png",
     component: EarthSphere,
+  },
+  {
+    id: "sparkling-sphere",
+    title: "Sparkling Sphere",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/neurons.png",
+    component: SparklingSphere,
   },
   {
     id: "neurons",
