@@ -284,23 +284,27 @@ const DandelionScene: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div>
       <div ref={mountRef} />
       <div
         style={{
           position: "absolute",
-          bottom: "2rem",
-          left: "50%",
-          transform: "translateX(-50%)",
+          bottom: "min(2rem, 5vh)",
+          right: "min(2rem, 5vw)",
           color: "rgba(255, 255, 255, 0.5)",
           fontFamily: "sans-serif",
-          fontSize: "0.9rem",
+          fontSize: "clamp(0.8rem, 2vw, 1rem)",
           letterSpacing: "0.2em",
           pointerEvents: "none",
           textTransform: "uppercase",
+          whiteSpace: "nowrap",
+          padding: "0.5rem",
+          textAlign: "right",
+          width: "auto",
+          maxWidth: "90vw",
         }}
       >
-        touch me
+        click on dandelions
       </div>
     </div>
   );
