@@ -8,6 +8,7 @@ import InteractiveEarth from "./sketches/particlesEarth/InteractiveEarth";
 import ParticleSphere from "./sketches/ParticleSphere";
 import Neurons from "./sketches/Neurons";
 import SparklingSphere from "./sketches/SparklingSphere";
+import DandelionScene from "./sketches/Dandelions";
 
 const sketches: Sketch[] = [
   {
@@ -16,6 +17,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/welcome.png",
     component: HomePage,
+  },
+  {
+    id: "dandelions",
+    title: "Dandelions",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/blobbyEarth.png",
+    component: DandelionScene,
   },
   {
     id: "blobby-earth",
