@@ -22,7 +22,7 @@ const sketches: Sketch[] = [
     id: "dandelions",
     title: "Dandelions",
     author: "Sagar",
-    thumbnailURL: "/sidebar/blobbyEarth.png",
+    thumbnailURL: "/sidebar/dandelions.png",
     component: DandelionScene,
   },
   {

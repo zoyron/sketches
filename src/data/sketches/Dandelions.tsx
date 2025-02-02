@@ -283,7 +283,27 @@ const DandelionScene: React.FC = () => {
     };
   }, []);
 
-  return <div ref={mountRef} />;
+  return (
+    <div style={{ position: "relative" }}>
+      <div ref={mountRef} />
+      <div
+        style={{
+          position: "absolute",
+          bottom: "2rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          color: "rgba(255, 255, 255, 0.5)",
+          fontFamily: "sans-serif",
+          fontSize: "0.9rem",
+          letterSpacing: "0.2em",
+          pointerEvents: "none",
+          textTransform: "uppercase",
+        }}
+      >
+        touch me
+      </div>
+    </div>
+  );
 };
 
 export default DandelionScene;
