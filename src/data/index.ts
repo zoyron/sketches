@@ -9,6 +9,7 @@ import ParticleSphere from "./sketches/ParticleSphere";
 import Neurons from "./sketches/Neurons";
 import SparklingSphere from "./sketches/SparklingSphere";
 import DandelionScene from "./sketches/Dandelions";
+import BlackHole from "./sketches/BlackHole";
 
 const sketches: Sketch[] = [
   {
@@ -17,6 +18,13 @@ const sketches: Sketch[] = [
     author: "Sagar",
     thumbnailURL: "/sidebar/welcome.png",
     component: HomePage,
+  },
+  {
+    id: "blackhole",
+    title: "Black hole",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/blackhole.png",
+    component: BlackHole,
   },
   {
     id: "dandelions",
