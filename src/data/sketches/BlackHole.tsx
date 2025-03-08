@@ -10,10 +10,12 @@ const BlackHole: React.FC = () => {
     // Renderer setup
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 1); // Set black background
     mountRef.current.appendChild(renderer.domElement);
 
     // Scene and camera setup
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000); // Set scene background to black
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
@@ -135,7 +137,7 @@ const BlackHole: React.FC = () => {
     };
   }, []);
 
-  return <div ref={mountRef} />;
+  return <div ref={mountRef} style={{ backgroundColor: "black" }} />;
 };
 
 export default BlackHole;
