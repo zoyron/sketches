@@ -23,7 +23,7 @@ const sketches: Sketch[] = [
     id: "blackhole",
     title: "Black hole",
     author: "Sagar",
-    thumbnailURL: "/sidebar/dandelions.png",
+    thumbnailURL: "/sidebar/blackhole.png",
     component: BlackHole,
   },
   {

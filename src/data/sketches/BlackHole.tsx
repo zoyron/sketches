@@ -10,12 +10,12 @@ const BlackHole: React.FC = () => {
     // Renderer setup
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 1); // Set black background
+    renderer.setClearColor(0x000000, 1);
     mountRef.current.appendChild(renderer.domElement);
 
     // Scene and camera setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000); // Set scene background to black
+    scene.background = new THREE.Color(0x000000);
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
@@ -51,7 +51,7 @@ const BlackHole: React.FC = () => {
           // Apply a small offset based on mouse position
           FC += (mouse - vec2(0.5)) * 100.0 * mouseInfluence;
           
-          // Original shader code
+          // Shader logic
           vec2 p = (FC.xy * 2.0 - r) / r.y / 0.7;
           vec2 d = vec2(-1.0, 1.0);
           vec2 c = p * mat2(1.0, 1.0, d / (0.1 + 5.0 / dot(5.0 * p - d, 5.0 * p - d)));
@@ -59,8 +59,7 @@ const BlackHole: React.FC = () => {
           
           v *= mat2(cos(log(length(v)) + time * 0.2 + vec4(0.0, 33.0, 11.0, 0.0))) * 5.0;
           
-          for (float i = 0.0; i < 9.0; i++) {
-              i += 1.0;
+          for (float i = 1.0; i <= 9.0; i += 1.0) {
               o += sin(v.xyyx) + 1.0;
               v += 0.7 * sin(v.yx * i + time) / i + 0.5;
           }
@@ -124,13 +123,9 @@ const BlackHole: React.FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       window.cancelAnimationFrame(animationFrameId);
-
-      // Dispose of Three.js resources
       geometry.dispose();
       material.dispose();
       renderer.dispose();
-
-      // Remove canvas
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
