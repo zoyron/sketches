@@ -3,9 +3,10 @@ import { Sketch } from "../types/Sketch";
 
 interface SketchViewerProps {
   sketch: Sketch;
+  onOpenSidebar: () => void;
 }
 
-const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
+const SketchViewer: React.FC<SketchViewerProps> = ({ sketch, onOpenSidebar }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
   const SketchComponent = sketch.component;
@@ -43,7 +44,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
       <div className={`w-full h-full flex justify-center items-center transition-opacity duration-500 ${
         fadeIn ? "opacity-100" : "opacity-0"
       }`}>
-        <SketchComponent />
+        <SketchComponent onOpenSidebar={onOpenSidebar} />
       </div>
     </div>
   );

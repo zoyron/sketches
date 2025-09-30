@@ -1,6 +1,10 @@
 import React from "react";
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  onOpenSidebar?: () => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ onOpenSidebar }) => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 relative overflow-hidden">
       {/* Organic background shapes */}
@@ -55,7 +59,16 @@ const HomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-2 pt-6 text-sm text-stone-500">
+          <button
+            onClick={onOpenSidebar}
+            className="md:hidden flex items-center justify-center gap-2 pt-6 text-sm text-stone-500 hover:text-emerald-700 active:scale-95 transition-all duration-200"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            <span className="font-light">Browse sketches in the sidebar</span>
+          </button>
+          <div className="hidden md:flex items-center justify-center gap-2 pt-6 text-sm text-stone-500">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>

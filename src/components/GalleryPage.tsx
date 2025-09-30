@@ -39,25 +39,27 @@ const GalleryPage: React.FC = () => {
   return (
     <div className="relative h-screen overflow-hidden bg-stone-50">
       {/* Mobile Menu Button - Floating Action Button */}
-      <button
-        onClick={() => setIsSidebarOpen(true)}
-        className="md:hidden fixed bottom-8 left-8 z-30 w-14 h-14 bg-stone-900 hover:bg-emerald-700 active:scale-95 text-amber-50 rounded-full shadow-xl hover:shadow-2xl active:shadow-lg transition-all duration-300 flex items-center justify-center group"
-        aria-label="Open sketches menu"
-      >
-        <svg
-          className="w-6 h-6 transition-transform group-hover:scale-110 group-active:scale-90"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {sketchId !== "homepage" && (
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="md:hidden fixed bottom-8 left-8 z-30 w-14 h-14 bg-stone-900 hover:bg-emerald-700 active:scale-95 text-amber-50 rounded-full shadow-xl hover:shadow-2xl active:shadow-lg transition-all duration-300 flex items-center justify-center group"
+          aria-label="Open sketches menu"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+          <svg
+            className="w-6 h-6 transition-transform group-hover:scale-110 group-active:scale-90"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      )}
 
       {/* Desktop Sidebar Toggle Button */}
       <button
@@ -108,7 +110,7 @@ const GalleryPage: React.FC = () => {
         <div className={`flex-grow overflow-hidden bg-stone-100 transition-all duration-500 ${
           isDesktopSidebarCollapsed ? "md:ml-0" : "md:ml-[320px]"
         }`}>
-          <SketchViewer sketch={currentSketch} />
+          <SketchViewer sketch={currentSketch} onOpenSidebar={() => setIsSidebarOpen(true)} />
         </div>
 
         {/* Mobile Overlay */}
