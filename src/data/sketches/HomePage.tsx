@@ -19,14 +19,6 @@ const HomePage: React.FC = () => {
         {/* Main Content */}
         <div className="space-y-8 sm:space-y-12 text-center">
           <div className="space-y-6 sm:space-y-8">
-            <div className="inline-block">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100/80 backdrop-blur-sm border border-emerald-200/50">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span className="text-sm font-medium text-emerald-800 tracking-wide">
-                  Creative Portfolio
-                </span>
-              </span>
-            </div>
 
             <div className="space-y-3 sm:space-y-4">
               <h1

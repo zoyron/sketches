@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createNoise3D } from "simplex-noise";
+import { getOptimalParticleCount } from "../../utils/deviceLOD";
 
 const ParticleSphere: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -9,9 +10,11 @@ const ParticleSphere: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    let animationFrameId: number;
     const noise3D = createNoise3D();
     let particles: THREE.Points;
-    const particleCount = 20000;
+    const MAX_PARTICLES = 20000;
+    const particleCount = getOptimalParticleCount(MAX_PARTICLES);
     const radius = 5;
 
     // Scene setup
@@ -120,7 +123,7 @@ const ParticleSphere: React.FC = () => {
 
     // Animation
     const animate = (time: number) => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       controls.update();
 
       // Add rotation to particles and wireframe
@@ -193,6 +196,7 @@ const ParticleSphere: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
 
       // Dispose geometries

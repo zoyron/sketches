@@ -8,6 +8,8 @@ const RotatingCube: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    let animationFrameId: number;
+
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);
     const camera = new THREE.PerspectiveCamera(
@@ -36,7 +38,7 @@ const RotatingCube: React.FC = () => {
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
       controls.update();
@@ -46,6 +48,7 @@ const RotatingCube: React.FC = () => {
     animate();
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, []);

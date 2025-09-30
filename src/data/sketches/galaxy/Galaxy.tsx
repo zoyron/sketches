@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import galaxyVertexShader from "./vertex.glsl";
 import galaxyFragmentShader from "./fragment.glsl";
+import { getOptimalParticleCount } from "../../../utils/deviceLOD";
 
 interface GalaxyParameters {
   count: number;
@@ -17,10 +18,12 @@ interface GalaxyParameters {
   outsideColor: string;
 }
 
+const MAX_PARTICLES = 50000;
+
 const Galaxy: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [parameters] = useState<GalaxyParameters>({
-    count: 50000,
+    count: getOptimalParticleCount(MAX_PARTICLES),
     size: 0.005,
     radius: 5,
     branches: 4,
@@ -33,6 +36,8 @@ const Galaxy: React.FC = () => {
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    let animationFrameId: number;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -181,13 +186,14 @@ const Galaxy: React.FC = () => {
 
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       if (gui) gui.destroy();
 

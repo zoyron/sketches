@@ -11,6 +11,8 @@ const EarthSphere: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    let animationFrameId: number;
+
     // Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
@@ -87,13 +89,14 @@ const EarthSphere: React.FC = () => {
 
       controls.update();
       renderer.render(scene, camera);
-      window.requestAnimationFrame(animate);
+      animationFrameId = window.requestAnimationFrame(animate);
     };
 
     animate();
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
 
       // Dispose geometries

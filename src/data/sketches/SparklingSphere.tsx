@@ -11,6 +11,8 @@ const SparklingSphere: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    let animationFrameId: number;
+
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -210,7 +212,7 @@ const SparklingSphere: React.FC = () => {
 
     // Animation loop
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       updateParticles();
       controls.update();
       composer.render();
@@ -225,6 +227,7 @@ const SparklingSphere: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleWindowResize);
       window.removeEventListener("mousemove", handleMouseMove);
 
@@ -251,7 +254,21 @@ const SparklingSphere: React.FC = () => {
     };
   }, []);
 
-  return <div ref={mountRef} />;
+  return (
+    <>
+      <div ref={mountRef} />
+      <div className="absolute bottom-8 right-8 pointer-events-none">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900/40 backdrop-blur-sm border border-white/10">
+          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+          </svg>
+          <span className="text-xs sm:text-sm font-medium text-white/70 tracking-wide">
+            Move mouse to create glow
+          </span>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default SparklingSphere;

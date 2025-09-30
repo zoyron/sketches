@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { getOptimalParticleCount } from "../../utils/deviceLOD";
 
 interface Sizes {
   width: number;
@@ -12,6 +13,8 @@ const DandelionScene: React.FC = () => {
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    let animationFrameId: number;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -143,7 +146,8 @@ const DandelionScene: React.FC = () => {
     };
 
     // Create particles
-    const particleCount = 45000;
+    const MAX_PARTICLES = 45000;
+    const particleCount = getOptimalParticleCount(MAX_PARTICLES);
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -197,7 +201,7 @@ const DandelionScene: React.FC = () => {
       .map(() => (Math.random() - 0.5) * 2);
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       controls.update();
 
       const time = clock.getElapsedTime();
@@ -273,6 +277,7 @@ const DandelionScene: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousedown", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
