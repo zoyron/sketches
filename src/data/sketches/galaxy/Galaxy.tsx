@@ -144,17 +144,20 @@ const Galaxy: React.FC = () => {
 
     generateGalaxy();
 
-    // GUI
-    const gui = new GUI();
-    gui.add(parameters, "count", 100, 1000000, 100).onChange(generateGalaxy);
-    gui.add(parameters, "radius", 0.01, 20, 0.01).onChange(generateGalaxy);
-    gui.add(parameters, "branches", 2, 20, 1).onChange(generateGalaxy);
-    gui.add(parameters, "randomness", 0, 2, 0.001).onChange(generateGalaxy);
-    gui
-      .add(parameters, "randomnessPower", 1, 10, 0.001)
-      .onChange(generateGalaxy);
-    gui.addColor(parameters, "insideColor").onChange(generateGalaxy);
-    gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
+    // GUI - only in development
+    let gui: GUI | null = null;
+    if (import.meta.env.DEV) {
+      gui = new GUI();
+      gui.add(parameters, "count", 100, 1000000, 100).onChange(generateGalaxy);
+      gui.add(parameters, "radius", 0.01, 20, 0.01).onChange(generateGalaxy);
+      gui.add(parameters, "branches", 2, 20, 1).onChange(generateGalaxy);
+      gui.add(parameters, "randomness", 0, 2, 0.001).onChange(generateGalaxy);
+      gui
+        .add(parameters, "randomnessPower", 1, 10, 0.001)
+        .onChange(generateGalaxy);
+      gui.addColor(parameters, "insideColor").onChange(generateGalaxy);
+      gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
+    }
 
     // Resize handler
     const handleResize = () => {
@@ -186,7 +189,7 @@ const Galaxy: React.FC = () => {
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
-      gui.destroy();
+      if (gui) gui.destroy();
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
