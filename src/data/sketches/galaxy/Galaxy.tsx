@@ -190,12 +190,21 @@ const Galaxy: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
       if (gui) gui.destroy();
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
+
+      // Properly dispose of Three.js resources
       geometry?.dispose();
       material?.dispose();
+      if (points) {
+        scene.remove(points);
+      }
+      scene.clear();
+      controls.dispose();
       renderer.dispose();
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, [parameters]);
 

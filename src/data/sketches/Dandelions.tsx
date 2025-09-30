@@ -276,10 +276,19 @@ const DandelionScene: React.FC = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousedown", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Properly dispose of Three.js resources
       geometry.dispose();
       particleMaterial.dispose();
       stemMaterial.dispose();
+      scene.clear();
+      controls.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 

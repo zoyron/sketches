@@ -29,22 +29,22 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className="space-y-3 sm:space-y-4">
-              <div className="relative inline-block">
-                <h1
-                  className="text-6xl sm:text-8xl lg:text-9xl font-bold text-stone-900 tracking-tight leading-none"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
-                  Sarlloc
-                </h1>
-                <span className="absolute -bottom-1 right-0 text-xs sm:text-sm text-stone-400 font-light italic">
-                  (Sagar Arora)
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-3 mt-8">
+              <h1
+                className="text-6xl sm:text-8xl lg:text-9xl font-bold text-stone-900 tracking-tight leading-none"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Sarlloc
+              </h1>
+              <div className="flex items-center justify-center gap-3">
                 <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-stone-400"></div>
-                <p className="text-base sm:text-lg font-light text-stone-600 tracking-[0.2em] uppercase">
-                  Creative Developer
-                </p>
+                <div className="flex flex-col items-center gap-1">
+                  <p className="text-base sm:text-lg font-light text-stone-600 tracking-[0.2em] uppercase">
+                    Creative Developer
+                  </p>
+                  <p className="text-xs text-stone-400 font-light">
+                    Sagar Arora
+                  </p>
+                </div>
                 <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-stone-400"></div>
               </div>
             </div>

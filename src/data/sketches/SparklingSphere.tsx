@@ -227,7 +227,27 @@ const SparklingSphere: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleWindowResize);
       window.removeEventListener("mousemove", handleMouseMove);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Dispose all particle geometries and materials
+      particles.forEach((particle) => {
+        particle.mesh.geometry.dispose();
+        (particle.mesh.material as THREE.MeshStandardMaterial).dispose();
+      });
+
+      // Clear scene
+      scene.clear();
+
+      // Dispose controls
+      controls.dispose();
+
+      // Dispose renderer
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      // Remove DOM element safely
+      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 

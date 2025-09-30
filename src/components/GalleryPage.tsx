@@ -41,7 +41,7 @@ const GalleryPage: React.FC = () => {
       {/* Mobile Menu Button - Floating Action Button */}
       <button
         onClick={() => setIsSidebarOpen(true)}
-        className="md:hidden fixed bottom-8 right-8 z-30 w-14 h-14 bg-stone-900 hover:bg-emerald-700 active:scale-95 text-amber-50 rounded-full shadow-xl hover:shadow-2xl active:shadow-lg transition-all duration-300 flex items-center justify-center group"
+        className="md:hidden fixed bottom-8 left-8 z-30 w-14 h-14 bg-stone-900 hover:bg-emerald-700 active:scale-95 text-amber-50 rounded-full shadow-xl hover:shadow-2xl active:shadow-lg transition-all duration-300 flex items-center justify-center group"
         aria-label="Open sketches menu"
       >
         <svg

@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
@@ -33,6 +33,16 @@ const Particles = ({ count = 50000 }) => {
       Math.cos(time * 0.3) * 3
     );
   });
+
+  // Cleanup for R3F - dispose geometry and material on unmount
+  useEffect(() => {
+    return () => {
+      if (mesh.current) {
+        mesh.current.geometry?.dispose();
+        (mesh.current.material as THREE.PointsMaterial)?.dispose();
+      }
+    };
+  }, []);
 
   return (
     <>

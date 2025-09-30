@@ -123,10 +123,15 @@ const BlackHole: React.FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       window.cancelAnimationFrame(animationFrameId);
+
+      // Properly dispose of Three.js resources
       geometry.dispose();
       material.dispose();
+      scene.clear();
       renderer.dispose();
-      if (mountRef.current) {
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
     };

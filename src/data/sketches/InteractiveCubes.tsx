@@ -144,7 +144,29 @@ const InteractiveCubes: React.FC = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Dispose geometries
+      geometry.dispose();
+
+      // Dispose materials
+      cubes.forEach((cube) => {
+        (cube.material as THREE.MeshLambertMaterial).dispose();
+      });
+
+      // Clear scene
+      scene.clear();
+
+      // Dispose controls
+      controls.dispose();
+
+      // Dispose renderer
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      // Remove DOM element safely
+      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 

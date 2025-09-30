@@ -95,7 +95,30 @@ const EarthSphere: React.FC = () => {
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Dispose geometries
+      geometry.dispose();
+
+      // Dispose materials
+      material.dispose();
+
+      // Dispose textures
+      perlinTexture.dispose();
+
+      // Clear scene
+      scene.clear();
+
+      // Dispose controls
+      controls.dispose();
+
+      // Dispose renderer
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      // Remove DOM element safely
+      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
