@@ -59,16 +59,7 @@ const HomePage: React.FC<HomePageProps> = ({ onOpenSidebar }) => {
             </p>
           </div>
 
-          <button
-            onClick={onOpenSidebar}
-            className="md:hidden flex items-center justify-center gap-2 pt-6 text-sm text-stone-500 hover:text-emerald-700 active:scale-95 transition-all duration-200"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-            <span className="font-light">Browse sketches in the sidebar</span>
-          </button>
-          <div className="hidden md:flex items-center justify-center gap-2 pt-6 text-sm text-stone-500">
+          <div className="flex items-center justify-center gap-2 pt-6 text-sm text-stone-500">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
@@ -77,7 +68,7 @@ const HomePage: React.FC<HomePageProps> = ({ onOpenSidebar }) => {
         </div>
 
         {/* Navigation Links - Bottom */}
-        <nav className="absolute bottom-8 left-8 sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-6 sm:gap-8">
+        <nav className="absolute bottom-8 right-8 sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-6 sm:gap-8">
           <a
             href="https://twitter.com/sarlloc"
             target="_blank"

@@ -6,7 +6,7 @@ interface SketchViewerProps {
   onOpenSidebar: () => void;
 }
 
-const SketchViewer: React.FC<SketchViewerProps> = ({ sketch, onOpenSidebar }) => {
+const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
   const SketchComponent = sketch.component;
@@ -44,7 +44,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch, onOpenSidebar }) =>
       <div className={`w-full h-full flex justify-center items-center transition-opacity duration-500 ${
         fadeIn ? "opacity-100" : "opacity-0"
       }`}>
-        <SketchComponent onOpenSidebar={onOpenSidebar} />
+        <SketchComponent />
       </div>
     </div>
   );
