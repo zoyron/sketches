@@ -118,6 +118,8 @@ const BlackHole: React.FC = () => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
 
+    const currentMount = mountRef.current;
+
     // Cleanup
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -131,8 +133,8 @@ const BlackHole: React.FC = () => {
       renderer.dispose();
       renderer.forceContextLoss();
 
-      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (currentMount && renderer.domElement.parentNode === currentMount) {
+        currentMount.removeChild(renderer.domElement);
       }
     };
   }, []);

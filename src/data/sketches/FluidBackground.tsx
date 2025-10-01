@@ -1,10 +1,10 @@
 import React, { useRef, useMemo, useEffect } from 'react';
-import { Canvas, useFrame, useThree, createPortal } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useFBO } from '@react-three/drei';
 import * as THREE from 'three';
 
 const FluidSimulation = () => {
-  const { gl, size, viewport } = useThree();
+  const { gl, viewport } = useThree();
 
   // Create render targets for ping-pong (balanced resolution for performance)
   const velocityFBOs = useRef([
@@ -194,7 +194,7 @@ const FluidSimulation = () => {
   }, []);
 
   const meshRef = useRef<THREE.Mesh>(null);
-  const scene = useMemo(() => new THREE.Scene(), []);
+  
   const camera = useMemo(() => new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), []);
   const quad = useMemo(() => new THREE.Mesh(new THREE.PlaneGeometry(2, 2)), []);
 
