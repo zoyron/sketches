@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               Collection
             </h2>
             <p className="text-sm text-stone-600 font-light tracking-wide">
-              {sketches.length - 1} 3D experiments
+              {sketches.filter(s => s.id !== 'homepage').length} 3D experiments
             </p>
           </div>
           {isMobileView && (

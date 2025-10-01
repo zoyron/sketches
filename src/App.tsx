@@ -10,7 +10,7 @@ import GalleryPage from "./components/GalleryPage";
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 antialiased">
+    <div className="min-h-screen bg-noir text-white antialiased">
       <Analytics />
       <Router>
         <Routes>

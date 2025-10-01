@@ -4,4 +4,7 @@ export interface Sketch {
   author: string;
   thumbnailURL: string;
   component: React.ComponentType;
+  description?: string;
+  technologies?: string[];
+  sourceCodeUrl?: string;
 }

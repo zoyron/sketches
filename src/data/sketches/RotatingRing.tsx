@@ -11,7 +11,7 @@ const RotatingTorus: React.FC = () => {
     let animationFrameId: number;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#1A1A2E");
+    scene.background = new THREE.Color("#000000");
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,

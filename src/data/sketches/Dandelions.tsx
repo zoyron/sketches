@@ -18,7 +18,7 @@ const DandelionScene: React.FC = () => {
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x120712);
+    scene.background = new THREE.Color(0x000000);
 
     // Sizes
     const sizes: Sizes = {

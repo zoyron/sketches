@@ -11,7 +11,7 @@ const RotatingCube: React.FC = () => {
     let animationFrameId: number;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1a2e);
+    scene.background = new THREE.Color(0x000000);
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,

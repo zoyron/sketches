@@ -19,7 +19,7 @@ const InteractiveEarth: React.FC = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#000");
+    scene.background = new THREE.Color("#000000");
 
     // Sizes
     const sizes = {
