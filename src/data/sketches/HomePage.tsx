@@ -4,7 +4,7 @@ interface HomePageProps {
   onOpenSidebar?: () => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onOpenSidebar }) => {
+const HomePage: React.FC<HomePageProps> = () => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 relative overflow-hidden">
       {/* Organic background shapes */}
@@ -68,7 +68,7 @@ const HomePage: React.FC<HomePageProps> = ({ onOpenSidebar }) => {
         </div>
 
         {/* Navigation Links - Bottom */}
-        <nav className="absolute bottom-8 right-8 sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 flex items-center gap-6 sm:gap-8">
+        <nav className="absolute bottom-8 right-8 sm:bottom-12 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 flex items-center gap-6 sm:gap-8">
           <a
             href="https://twitter.com/sarlloc"
             target="_blank"
