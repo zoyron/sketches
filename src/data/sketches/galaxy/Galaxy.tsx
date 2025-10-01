@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import galaxyVertexShader from "./vertex.glsl";
 import galaxyFragmentShader from "./fragment.glsl";
+import { getOptimalParticleCount } from "../../../utils/deviceLOD";
 
 interface GalaxyParameters {
   count: number;
@@ -17,10 +18,12 @@ interface GalaxyParameters {
   outsideColor: string;
 }
 
+const MAX_PARTICLES = 50000;
+
 const Galaxy: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [parameters] = useState<GalaxyParameters>({
-    count: 50000,
+    count: getOptimalParticleCount(MAX_PARTICLES),
     size: 0.005,
     radius: 5,
     branches: 4,
@@ -33,6 +36,8 @@ const Galaxy: React.FC = () => {
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    let animationFrameId: number;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -144,17 +149,20 @@ const Galaxy: React.FC = () => {
 
     generateGalaxy();
 
-    // GUI
-    const gui = new GUI();
-    gui.add(parameters, "count", 100, 1000000, 100).onChange(generateGalaxy);
-    gui.add(parameters, "radius", 0.01, 20, 0.01).onChange(generateGalaxy);
-    gui.add(parameters, "branches", 2, 20, 1).onChange(generateGalaxy);
-    gui.add(parameters, "randomness", 0, 2, 0.001).onChange(generateGalaxy);
-    gui
-      .add(parameters, "randomnessPower", 1, 10, 0.001)
-      .onChange(generateGalaxy);
-    gui.addColor(parameters, "insideColor").onChange(generateGalaxy);
-    gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
+    // GUI - only in development
+    let gui: GUI | null = null;
+    if (import.meta.env.DEV) {
+      gui = new GUI();
+      gui.add(parameters, "count", 100, 1000000, 100).onChange(generateGalaxy);
+      gui.add(parameters, "radius", 0.01, 20, 0.01).onChange(generateGalaxy);
+      gui.add(parameters, "branches", 2, 20, 1).onChange(generateGalaxy);
+      gui.add(parameters, "randomness", 0, 2, 0.001).onChange(generateGalaxy);
+      gui
+        .add(parameters, "randomnessPower", 1, 10, 0.001)
+        .onChange(generateGalaxy);
+      gui.addColor(parameters, "insideColor").onChange(generateGalaxy);
+      gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
+    }
 
     // Resize handler
     const handleResize = () => {
@@ -178,21 +186,31 @@ const Galaxy: React.FC = () => {
 
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
-      gui.destroy();
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
+      if (gui) gui.destroy();
+
+      // Properly dispose of Three.js resources
       geometry?.dispose();
       material?.dispose();
+      if (points) {
+        scene.remove(points);
+      }
+      scene.clear();
+      controls.dispose();
       renderer.dispose();
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, [parameters]);
 

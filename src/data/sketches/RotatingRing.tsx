@@ -8,6 +8,8 @@ const RotatingTorus: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    let animationFrameId: number;
+
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#1A1A2E");
     const camera = new THREE.PerspectiveCamera(
@@ -37,7 +39,7 @@ const RotatingTorus: React.FC = () => {
     controls.dampingFactor = 0.25;
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       mesh.rotation.y += 0.01;
       renderer.render(scene, camera);
     };
@@ -45,6 +47,7 @@ const RotatingTorus: React.FC = () => {
     animate();
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, []);

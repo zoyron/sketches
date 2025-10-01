@@ -1,12 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { getOptimalParticleCount } from "../../utils/deviceLOD";
 
 const Neurons: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    let animationFrameId: number;
 
     const particleVertexShader = `
       attribute float size;
@@ -44,7 +47,8 @@ const Neurons: React.FC = () => {
     renderer.setClearColor(0x000000);
     mountRef.current.appendChild(renderer.domElement);
 
-    const particleCount = 1000;
+    const MAX_PARTICLES = 1000;
+    const particleCount = getOptimalParticleCount(MAX_PARTICLES);
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
@@ -131,14 +135,39 @@ const Neurons: React.FC = () => {
     controls.dampingFactor = 0.25;
 
 
+    // Spatial grid for optimized distance checks
+    const GRID_SIZE = maxDistance;
+    const spatialGrid = new Map<string, number[]>();
+
+    const getCellKey = (x: number, y: number, z: number): string => {
+      const cellX = Math.floor(x / GRID_SIZE);
+      const cellY = Math.floor(y / GRID_SIZE);
+      const cellZ = Math.floor(z / GRID_SIZE);
+      return `${cellX},${cellY},${cellZ}`;
+    };
+
+    const getAdjacentCells = (key: string): string[] => {
+      const [x, y, z] = key.split(',').map(Number);
+      const adjacent: string[] = [];
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dz = -1; dz <= 1; dz++) {
+            adjacent.push(`${x + dx},${y + dy},${z + dz}`);
+          }
+        }
+      }
+      return adjacent;
+    };
+
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
 
       const positions = geometry.attributes.position.array;
       let lineIndex = 0;
 
       scene.rotation.y += 0.00075;
 
+      // Update particle positions
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
 
@@ -153,29 +182,55 @@ const Neurons: React.FC = () => {
         }
       }
 
+      // Build spatial grid
+      spatialGrid.clear();
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
-        for (let j = i + 1; j < particleCount; j++) {
-          const j3 = j * 3;
+        const key = getCellKey(positions[i3], positions[i3 + 1], positions[i3 + 2]);
+        if (!spatialGrid.has(key)) {
+          spatialGrid.set(key, []);
+        }
+        spatialGrid.get(key)!.push(i);
+      }
 
-          const dx = positions[i3] - positions[j3];
-          const dy = positions[i3 + 1] - positions[j3 + 1];
-          const dz = positions[i3 + 2] - positions[j3 + 2];
-          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      // Check connections using spatial grid (optimized)
+      const checked = new Set<string>();
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const cellKey = getCellKey(positions[i3], positions[i3 + 1], positions[i3 + 2]);
+        const adjacentCells = getAdjacentCells(cellKey);
 
-          if (distance < maxDistance && lineIndex < maxConnections * 6) {
-            linePositions[lineIndex] = positions[i3];
-            linePositions[lineIndex + 1] = positions[i3 + 1];
-            linePositions[lineIndex + 2] = positions[i3 + 2];
-            linePositions[lineIndex + 3] = positions[j3];
-            linePositions[lineIndex + 4] = positions[j3 + 1];
-            linePositions[lineIndex + 5] = positions[j3 + 2];
+        for (const adjKey of adjacentCells) {
+          const nearbyParticles = spatialGrid.get(adjKey);
+          if (!nearbyParticles) continue;
 
-            for (let k = 0; k < 6; k++) {
-              lineColors[lineIndex + k] = 0.8;
+          for (const j of nearbyParticles) {
+            if (i >= j) continue; // Skip duplicates and self
+
+            const pairKey = `${i},${j}`;
+            if (checked.has(pairKey)) continue;
+            checked.add(pairKey);
+
+            const j3 = j * 3;
+            const dx = positions[i3] - positions[j3];
+            const dy = positions[i3 + 1] - positions[j3 + 1];
+            const dz = positions[i3 + 2] - positions[j3 + 2];
+            const distSq = dx * dx + dy * dy + dz * dz;
+
+            if (distSq < maxDistance * maxDistance && lineIndex < maxConnections * 6) {
+              linePositions[lineIndex] = positions[i3];
+              linePositions[lineIndex + 1] = positions[i3 + 1];
+              linePositions[lineIndex + 2] = positions[i3 + 2];
+              linePositions[lineIndex + 3] = positions[j3];
+              linePositions[lineIndex + 4] = positions[j3 + 1];
+              linePositions[lineIndex + 5] = positions[j3 + 2];
+
+              for (let k = 0; k < 6; k++) {
+                lineColors[lineIndex + k] = 0.8;
+              }
+
+              lineIndex += 6;
             }
-
-            lineIndex += 6;
           }
         }
       }
@@ -198,8 +253,22 @@ const Neurons: React.FC = () => {
     animate();
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Properly dispose of Three.js resources
+      geometry.dispose();
+      material.dispose();
+      lineGeometry.dispose();
+      lineMaterial.dispose();
+      scene.clear();
+      controls.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 

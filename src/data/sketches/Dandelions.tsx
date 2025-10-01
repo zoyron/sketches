@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { getOptimalParticleCount } from "../../utils/deviceLOD";
 
 interface Sizes {
   width: number;
@@ -12,6 +13,8 @@ const DandelionScene: React.FC = () => {
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    let animationFrameId: number;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -143,7 +146,8 @@ const DandelionScene: React.FC = () => {
     };
 
     // Create particles
-    const particleCount = 45000;
+    const MAX_PARTICLES = 45000;
+    const particleCount = getOptimalParticleCount(MAX_PARTICLES);
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -197,7 +201,7 @@ const DandelionScene: React.FC = () => {
       .map(() => (Math.random() - 0.5) * 2);
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       controls.update();
 
       const time = clock.getElapsedTime();
@@ -273,38 +277,38 @@ const DandelionScene: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousedown", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
-      mountRef.current?.removeChild(renderer.domElement);
+
+      // Properly dispose of Three.js resources
       geometry.dispose();
       particleMaterial.dispose();
       stemMaterial.dispose();
+      scene.clear();
+      controls.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
+
+      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
   return (
     <div>
       <div ref={mountRef} />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "min(2rem, 5vh)",
-          right: "min(2rem, 5vw)",
-          color: "rgba(255, 255, 255, 0.5)",
-          fontFamily: "sans-serif",
-          fontSize: "clamp(0.8rem, 2vw, 1rem)",
-          letterSpacing: "0.2em",
-          pointerEvents: "none",
-          textTransform: "uppercase",
-          whiteSpace: "nowrap",
-          padding: "0.5rem",
-          textAlign: "right",
-          width: "auto",
-          maxWidth: "90vw",
-        }}
-      >
-        click on dandelions
+      <div className="absolute bottom-8 right-8 pointer-events-none">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900/40 backdrop-blur-sm border border-white/10">
+          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+          </svg>
+          <span className="text-xs sm:text-sm font-medium text-white/70 tracking-wide">
+            Click to scatter
+          </span>
+        </div>
       </div>
     </div>
   );
