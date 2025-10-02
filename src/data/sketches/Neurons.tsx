@@ -252,6 +252,8 @@ const Neurons: React.FC = () => {
     window.addEventListener("resize", handleResize);
     animate();
 
+    const currentMount = mountRef.current;
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
@@ -266,8 +268,8 @@ const Neurons: React.FC = () => {
       renderer.dispose();
       renderer.forceContextLoss();
 
-      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (currentMount && renderer.domElement.parentNode === currentMount) {
+        currentMount.removeChild(renderer.domElement);
       }
     };
   }, []);

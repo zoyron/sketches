@@ -18,7 +18,7 @@ const DandelionScene: React.FC = () => {
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x120712);
+    scene.background = new THREE.Color(0x000000);
 
     // Sizes
     const sizes: Sizes = {
@@ -275,6 +275,8 @@ const DandelionScene: React.FC = () => {
 
     window.addEventListener("resize", handleResize);
 
+    const currentMount = mountRef.current;
+
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -291,8 +293,8 @@ const DandelionScene: React.FC = () => {
       renderer.dispose();
       renderer.forceContextLoss();
 
-      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (currentMount && renderer.domElement.parentNode === currentMount) {
+        currentMount.removeChild(renderer.domElement);
       }
     };
   }, []);

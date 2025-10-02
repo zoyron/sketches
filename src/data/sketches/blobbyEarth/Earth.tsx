@@ -15,7 +15,7 @@ const EarthSphere: React.FC = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87ceeb);
+    scene.background = new THREE.Color(0x000000);
 
     // Sizes
     const sizes = {

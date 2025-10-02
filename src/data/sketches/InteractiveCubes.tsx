@@ -10,7 +10,7 @@ const InteractiveCubes: React.FC = () => {
     if (!mountRef.current) return;
 
     let animationFrameId: number;
-    let cubes: THREE.Mesh[] = [];
+    const cubes: THREE.Mesh[] = [];
     const cursor = new THREE.Vector3();
     const oPos = new THREE.Vector3();
     const vec = new THREE.Vector3();
@@ -141,6 +141,8 @@ const InteractiveCubes: React.FC = () => {
 
     animate();
 
+    const currentMount = mountRef.current;
+
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -166,8 +168,8 @@ const InteractiveCubes: React.FC = () => {
       renderer.forceContextLoss();
 
       // Remove DOM element safely
-      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (currentMount && renderer.domElement.parentElement === currentMount) {
+        currentMount.removeChild(renderer.domElement);
       }
     };
   }, []);
