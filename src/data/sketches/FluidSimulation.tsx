@@ -6,14 +6,14 @@ import * as THREE from 'three';
 const FluidSimulationScene = () => {
   const { gl, viewport } = useThree();
 
-  // Create render targets for ping-pong (balanced resolution for performance)
+  // Create render targets for ping-pong (higher resolution for clarity)
   const velocityFBOs = useRef([
-    useFBO(384, 384, {
+    useFBO(768, 768, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       type: THREE.FloatType,
     }),
-    useFBO(384, 384, {
+    useFBO(768, 768, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       type: THREE.FloatType,
@@ -21,11 +21,11 @@ const FluidSimulationScene = () => {
   ]);
 
   const dyeFBOs = useRef([
-    useFBO(384, 384, {
+    useFBO(768, 768, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
     }),
-    useFBO(384, 384, {
+    useFBO(768, 768, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
     })
@@ -43,7 +43,7 @@ const FluidSimulationScene = () => {
     return new THREE.ShaderMaterial({
       uniforms: {
         velocityField: { value: null },
-        resolution: { value: new THREE.Vector2(384, 384) },
+        resolution: { value: new THREE.Vector2(768, 768) },
         mouse: { value: new THREE.Vector4() },
         prevMouse: { value: new THREE.Vector4() },
       },
@@ -125,7 +125,7 @@ const FluidSimulationScene = () => {
       uniforms: {
         velocityField: { value: null },
         dyeField: { value: null },
-        resolution: { value: new THREE.Vector2(384, 384) },
+        resolution: { value: new THREE.Vector2(768, 768) },
         mouse: { value: new THREE.Vector4() },
         prevMouse: { value: new THREE.Vector4() },
       },
@@ -150,18 +150,18 @@ const FluidSimulationScene = () => {
           vec2 uv = vUv;
           vec2 stepSize = 1.0 / resolution;
           vec4 vel = texture2D(velocityField, uv);
-          vec4 col = texture2D(dyeField, uv - 0.1 * vel.xy * stepSize * 2.0);
+          vec4 col = texture2D(dyeField, uv - 0.08 * vel.xy * stepSize);
 
           if (mouse.z > 0.5 && prevMouse.z > 0.5) {
             float h = hash(mouse.z + mouse.w);
             // Red colors with minimal bloom intensity
             vec3 rgb = vec3(1.0, 0.3 + h * 0.1, 0.25 + h * 0.1);
             float bloom = smoothstep(-0.5, 0.5, length(mouse.xy - prevMouse.xy));
-            col.rgb += bloom * 0.0002 / pow(length(uv - mouse.xy), 1.6) * rgb;
+            col.rgb += bloom * 0.0004 / pow(length(uv - mouse.xy), 1.4) * rgb;
           }
 
           col = clamp(col, 0.0, 5.0);
-          col = max(col - col * 0.01, 0.0);
+          col = max(col - col * 0.008, 0.0);
 
           gl_FragColor = col;
         }
