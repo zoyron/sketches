@@ -22,7 +22,7 @@ const ExhibitionMenu: React.FC<ExhibitionMenuProps> = ({
       {/* Elegant Background Overlay */}
       <div
         className="fixed inset-0 z-40 bg-noir/95 backdrop-blur-2xl transition-opacity duration-700"
-        style={{ opacity: isOpen ? 1 : 0 }}
+        style={{ opacity: isOpen ? 1 : 0, touchAction: 'pan-y' }}
         onClick={onClose}
       >
         {/* Close Button */}
@@ -47,7 +47,7 @@ const ExhibitionMenu: React.FC<ExhibitionMenuProps> = ({
         </button>
 
         {/* Gallery Container */}
-        <div className="fixed inset-0 overflow-y-auto z-40 px-8 py-24 md:px-16 lg:px-24">
+        <div className="fixed inset-0 overflow-y-auto z-40 px-8 py-24 md:px-16 lg:px-24" style={{ touchAction: 'pan-y' }}>
           <div className="max-w-[1800px] mx-auto">
             {/* Refined Header */}
             <div className="mb-20">

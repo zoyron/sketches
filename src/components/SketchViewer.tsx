@@ -22,7 +22,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
   }, [isFirstLoad]);
 
   return (
-    <div className="w-full h-full relative bg-noir">
+    <div className="w-full h-full relative bg-noir" style={{ touchAction: 'none' }}>
       {/* Loading Animation - only on first load */}
       {isFirstLoad && <LoadingAnimation />}
 
@@ -31,6 +31,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
         className={`w-full h-full flex justify-center items-center transition-opacity duration-500 ${
           isFirstLoad ? "opacity-0" : "opacity-100"
         }`}
+        style={{ touchAction: 'none' }}
       >
         <SketchComponent />
       </div>
