@@ -10,6 +10,7 @@ import Neurons from "./sketches/Neurons";
 import SparklingSphere from "./sketches/SparklingSphere";
 import DandelionScene from "./sketches/Dandelions";
 import BlackHole from "./sketches/BlackHole";
+import FluidSimulation from "./sketches/FluidSimulation";
 
 // Homepage is separate - not part of the sketches collection
 export const homepage: Sketch = {
@@ -23,6 +24,16 @@ export const homepage: Sketch = {
 };
 
 const sketches: Sketch[] = [
+  {
+    id: "fluid-simulation",
+    title: "Fluid",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/fluid.png",
+    component: FluidSimulation,
+    description: "An interactive fluid dynamics simulation with realistic physics and customizable color trails.",
+    technologies: ["Three.js", "GLSL", "React Three Fiber", "FBO"],
+    sourceCodeUrl: "https://github.com/zoyron/sketches/blob/main/src/data/sketches/FluidSimulation.tsx",
+  },
   {
     id: "blackhole",
     title: "Black hole",

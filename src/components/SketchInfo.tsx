@@ -15,6 +15,7 @@ const SketchInfo: React.FC<SketchInfoProps> = ({ sketch, isOpen, onClose }) => {
         <div
           className="fixed inset-0 bg-noir/60 backdrop-blur-sm z-40 md:hidden"
           onClick={onClose}
+          style={{ touchAction: 'none' }}
         />
       )}
 
@@ -23,11 +24,12 @@ const SketchInfo: React.FC<SketchInfoProps> = ({ sketch, isOpen, onClose }) => {
         className={`fixed top-0 left-0 h-full w-full max-w-md bg-charcoal/98 backdrop-blur-xl border-r border-gray-400/10 shadow-2xl z-50 transition-transform duration-700 ease-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{ touchAction: 'pan-y' }}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-400/60 hover:text-white transition-all duration-300 flex items-center justify-center group md:hidden"
+          className="absolute top-6 right-6 text-gray-400/60 hover:text-white transition-all duration-300 flex items-center justify-center group"
           aria-label="Close info panel"
         >
           <svg
