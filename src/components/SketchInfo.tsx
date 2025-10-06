@@ -27,7 +27,7 @@ const SketchInfo: React.FC<SketchInfoProps> = ({ sketch, isOpen, onClose }) => {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-400/60 hover:text-white transition-all duration-300 flex items-center justify-center group md:hidden"
+          className="absolute top-6 right-6 text-gray-400/60 hover:text-white transition-all duration-300 flex items-center justify-center group"
           aria-label="Close info panel"
         >
           <svg
