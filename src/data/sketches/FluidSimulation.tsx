@@ -1,9 +1,9 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useFBO } from '@react-three/drei';
 import * as THREE from 'three';
 
-const FluidSimulationScene = () => {
+const FluidSimulationScene = ({ fluidColor }: { fluidColor: THREE.Color }) => {
   const { gl, viewport } = useThree();
 
   // Create render targets for ping-pong (balanced resolution for performance)
@@ -128,6 +128,7 @@ const FluidSimulationScene = () => {
         resolution: { value: new THREE.Vector2(384, 384) },
         mouse: { value: new THREE.Vector4() },
         prevMouse: { value: new THREE.Vector4() },
+        fluidColor: { value: new THREE.Vector3() },
       },
       vertexShader: `
         varying vec2 vUv;
@@ -142,6 +143,7 @@ const FluidSimulationScene = () => {
         uniform vec2 resolution;
         uniform vec4 mouse;
         uniform vec4 prevMouse;
+        uniform vec3 fluidColor;
         varying vec2 vUv;
 
         float hash(float n) { return fract(sin(n) * 43758.5453123); }
@@ -154,8 +156,7 @@ const FluidSimulationScene = () => {
 
           if (mouse.z > 0.5 && prevMouse.z > 0.5) {
             float h = hash(mouse.z + mouse.w);
-            // Red colors with variation
-            vec3 rgb = vec3(0.8 + h * 0.2, 0.1 + h * 0.1, 0.1 + h * 0.1);
+            vec3 rgb = fluidColor * (0.8 + h * 0.2);
             float bloom = smoothstep(-0.5, 0.5, length(mouse.xy - prevMouse.xy));
             col.rgb += bloom * 0.0008 / pow(length(uv - mouse.xy), 1.6) * rgb;
           }
@@ -259,6 +260,7 @@ const FluidSimulationScene = () => {
     dyeMaterial.uniforms.dyeField.value = readDye.texture;
     dyeMaterial.uniforms.mouse.value.copy(pointer.current);
     dyeMaterial.uniforms.prevMouse.value.copy(prevPointer.current);
+    dyeMaterial.uniforms.fluidColor.value.set(fluidColor.r, fluidColor.g, fluidColor.b);
     quad.material = dyeMaterial;
     gl.setRenderTarget(writeDye);
     gl.render(quad, camera);
@@ -287,6 +289,9 @@ const FluidSimulationScene = () => {
 };
 
 const FluidSimulation: React.FC = () => {
+  const [color, setColor] = useState('#cc1a1a');
+  const fluidColor = useMemo(() => new THREE.Color(color), [color]);
+
   return (
     <div className="absolute inset-0">
       <Canvas
@@ -294,8 +299,18 @@ const FluidSimulation: React.FC = () => {
         style={{ background: '#000000' }}
         gl={{ preserveDrawingBuffer: true }}
       >
-        <FluidSimulationScene />
+        <FluidSimulationScene fluidColor={fluidColor} />
       </Canvas>
+
+      <div className="absolute top-4 left-4 flex items-center gap-2 sm:gap-3 bg-black/70 backdrop-blur-md px-3 py-2 sm:px-4 rounded-xl border border-white/10 shadow-lg">
+        <label className="text-white text-xs sm:text-sm font-medium">Color:</label>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          className="w-10 h-10 sm:w-12 sm:h-10 rounded-lg cursor-pointer border-0 hover:opacity-80 transition-opacity"
+        />
+      </div>
     </div>
   );
 };
