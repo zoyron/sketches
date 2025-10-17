@@ -302,8 +302,7 @@ const FluidSimulation: React.FC = () => {
         <FluidSimulationScene fluidColor={fluidColor} />
       </Canvas>
 
-      <div className="absolute top-4 left-4 flex items-center gap-2 sm:gap-3 bg-black/70 backdrop-blur-md px-3 py-2 sm:px-4 rounded-xl border border-white/10 shadow-lg">
-        <label className="text-white text-xs sm:text-sm font-medium">Color:</label>
+      <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md p-2 rounded-xl border border-white/10 shadow-lg">
         <input
           type="color"
           value={color}
