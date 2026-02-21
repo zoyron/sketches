@@ -1,3 +1,5 @@
+// The original creator of the shader code used in this visual is https://x.com/XorDev
+
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
