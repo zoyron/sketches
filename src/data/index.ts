@@ -37,7 +37,7 @@ const sketches: Sketch[] = [
   {
     id: "blackhole",
     title: "Black hole",
-    author: "Sagar",
+    author: "@XorDev on twitter",
     thumbnailURL: "/sidebar/blackhole.png",
     component: BlackHole,
     description: "A mesmerizing simulation of gravitational forces and light bending around a black hole's event horizon.",
