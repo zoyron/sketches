@@ -20,11 +20,12 @@ const BlackHole: React.FC = () => {
     camera.position.z = 1;
 
     // Mouse tracking
+    const targetMouse = new THREE.Vector2(0.5, 0.5);
     const mouse = new THREE.Vector2(0.5, 0.5);
 
     const handleMouseMove = (event: MouseEvent) => {
-      mouse.x = event.clientX / window.innerWidth;
-      mouse.y = 1.0 - event.clientY / window.innerHeight;
+      targetMouse.x = event.clientX / window.innerWidth;
+      targetMouse.y = 1.0 - event.clientY / window.innerHeight;
     };
 
     const handleResize = () => {
@@ -43,15 +44,26 @@ const BlackHole: React.FC = () => {
           vec2 FC = gl_FragCoord.xy;
           vec2 r = resolution.xy;
           
-          // Simple mouse influence
-          float mouseEffect = 0.1;
-          float distToMouse = length((FC/r - mouse) * 2.0);
-          float mouseInfluence = smoothstep(0.5, 0.0, distToMouse) * mouseEffect;
+          // Fluidic mouse interaction
+          float mouseEffect = 0.15;
+          vec2 m = mouse;
+          vec2 diff = (FC/r - m);
+          float distToMouse = length(diff * 2.0);
+          float mouseInfluence = smoothstep(0.8, 0.0, distToMouse) * mouseEffect;
           
-          // Apply a small offset based on mouse position
-          FC += (mouse - vec2(0.5)) * 100.0 * mouseInfluence;
+          // Apply a rotational twist based on mouse proximity for a fluidic feel
+          float angle = mouseInfluence * 1.5;
+          float s = sin(angle), c_cos = cos(angle);
+          mat2 rot = mat2(c_cos, -s, s, c_cos);
           
-          // Shader logic
+          FC -= m * r;
+          FC *= rot;
+          FC += m * r;
+          
+          // Apply a gentle offset based on mouse position
+          FC += (m - vec2(0.5)) * 120.0 * mouseInfluence;
+          
+          // Original shader logic - preserving the beautiful math
           vec2 p = (FC.xy * 2.0 - r) / r.y / 0.7;
           vec2 d = vec2(-1.0, 1.0);
           vec2 c = p * mat2(1.0, 1.0, d / (0.1 + 5.0 / dot(5.0 * p - d, 5.0 * p - d)));
@@ -64,10 +76,13 @@ const BlackHole: React.FC = () => {
               v += 0.7 * sin(v.yx * i + time) / i + 0.5;
           }
           
-          o = 1.0 - exp(-exp(c.x * vec4(0.6, -0.4, -1.0, 0.0)) / o / 
+          // Outer-spacy colors: Cosmic Purple / Blue / Cyan
+          // Modified the original color vector (0.6, -0.4, -1.0, 0.0) -> (0.2, 0.1, 0.7, 0.0)
+          vec4 spaceColor = vec4(0.2, 0.1, 0.7, 0.0);
+          
+          o = 1.0 - exp(-exp(c.x * spaceColor) / o / 
               (0.1 + 0.1 * pow(length(sin(v / 0.3) * 0.2 + c * vec2(1.0, 2.0)) - 1.0, 2.0)) / 
-              (1.0 + 7.0 * exp(0.3 * c.y - dot(c, c))) / 
-              (0.03 + abs(length(p) - 0.7)) * 0.2);
+              (1.0 + 7.0 * exp(0.3 * c.y - dot(c, c))) * 2.0);
           
           gl_FragColor = o;
       }
@@ -101,6 +116,9 @@ const BlackHole: React.FC = () => {
 
     // Animation
     function animate() {
+      // Smoothly interpolate mouse position for fluidic interactivity
+      mouse.lerp(targetMouse, 0.05);
+
       uniforms.time.value += 0.01;
       uniforms.mouse.value.copy(mouse);
       renderer.render(scene, camera);
