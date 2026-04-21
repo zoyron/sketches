@@ -85,6 +85,15 @@ const HomePage: React.FC<HomePageProps> = () => {
           </a>
           <span className="text-gray-600">•</span>
           <a
+            href="https://www.linkedin.com/in/sagar-arora-b99a371ab/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
+          >
+            LinkedIn
+          </a>
+          <span className="text-gray-600">•</span>
+          <a
             href="https://buymeacoffee.com/sarlloc"
             target="_blank"
             rel="noopener noreferrer"
