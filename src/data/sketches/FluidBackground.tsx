@@ -187,7 +187,9 @@ const FluidSimulation = () => {
 
         void main() {
           vec4 col = texture2D(dyeField, vUv);
-          gl_FragColor = vec4(sqrt(col.rgb), 1.0);
+          vec3 tonemapped = sqrt(col.rgb);
+          tonemapped = tonemapped / (1.0 + tonemapped * 0.35);
+          gl_FragColor = vec4(tonemapped, 1.0);
         }
       `,
     });

@@ -24,17 +24,26 @@ const HomePage: React.FC<HomePageProps> = () => {
             <div className="space-y-3 sm:space-y-4">
               <h1
                 className="text-6xl sm:text-8xl lg:text-9xl font-bold text-white tracking-tight leading-none"
-                style={{ fontFamily: "'Playfair Display', serif" }}
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  textShadow: "0 0 40px rgba(0,0,0,0.55), 0 0 80px rgba(0,0,0,0.35), 0 0 140px rgba(0,0,0,0.2)",
+                }}
               >
                 Sarlloc
               </h1>
               <div className="flex items-center justify-center gap-3">
                 <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-gray-400"></div>
                 <div className="flex flex-col items-center gap-1">
-                  <p className="text-base sm:text-lg font-light text-gray-300 tracking-[0.2em] uppercase">
+                  <p
+                    className="text-base sm:text-lg font-light text-gray-300 tracking-[0.2em] uppercase"
+                    style={{ textShadow: "0 0 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.35)" }}
+                  >
                     Creative Developer
                   </p>
-                  <p className="text-xs text-gray-400 font-light">
+                  <p
+                    className="text-xs text-gray-400 font-light"
+                    style={{ textShadow: "0 0 16px rgba(0,0,0,0.6), 0 0 32px rgba(0,0,0,0.3)" }}
+                  >
                     Sagar Arora
                   </p>
                 </div>
@@ -44,7 +53,10 @@ const HomePage: React.FC<HomePageProps> = () => {
           </div>
 
           <div className="max-w-2xl mx-auto">
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-200 font-light leading-relaxed">
+            <p
+              className="text-lg sm:text-xl lg:text-2xl text-gray-200 font-light leading-relaxed"
+              style={{ textShadow: "0 0 24px rgba(0,0,0,0.6), 0 0 48px rgba(0,0,0,0.35), 0 0 80px rgba(0,0,0,0.2)" }}
+            >
               Exploring the intersection of code and creativity through{" "}
               <span className="relative inline-block group">
                 <span className="relative z-10 font-semibold text-white italic" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -56,8 +68,11 @@ const HomePage: React.FC<HomePageProps> = () => {
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-2 pt-6 text-sm text-gray-400">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div
+            className="flex items-center justify-center gap-2 pt-6 text-sm text-gray-200"
+            style={{ textShadow: "0 0 18px rgba(0,0,0,0.7), 0 0 36px rgba(0,0,0,0.4)" }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ filter: "drop-shadow(0 0 12px rgba(0,0,0,0.6))" }}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
             <span className="font-light">Click the grid menu in the top-right corner</span>
@@ -65,39 +80,42 @@ const HomePage: React.FC<HomePageProps> = () => {
         </div>
 
         {/* Navigation Links - Bottom */}
-        <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 sm:bottom-12 flex items-center gap-6 sm:gap-8">
+        <nav
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 sm:bottom-12 flex items-center gap-6 sm:gap-8"
+          style={{ textShadow: "0 0 16px rgba(0,0,0,0.75), 0 0 32px rgba(0,0,0,0.4)" }}
+        >
           <a
             href="https://twitter.com/sarlloc"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
+            className="text-xs sm:text-sm font-medium text-gray-200 hover:text-white transition-colors duration-300"
           >
             Twitter
           </a>
-          <span className="text-gray-600">•</span>
+          <span className="text-gray-400">•</span>
           <a
             href="https://github.com/zoyron/sketches"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
+            className="text-xs sm:text-sm font-medium text-gray-200 hover:text-white transition-colors duration-300"
           >
             GitHub
           </a>
-          <span className="text-gray-600">•</span>
+          <span className="text-gray-400">•</span>
           <a
             href="https://www.linkedin.com/in/sagar-arora-b99a371ab/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
+            className="text-xs sm:text-sm font-medium text-gray-200 hover:text-white transition-colors duration-300"
           >
             LinkedIn
           </a>
-          <span className="text-gray-600">•</span>
+          <span className="text-gray-400">•</span>
           <a
             href="https://buymeacoffee.com/sarlloc"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors duration-300"
+            className="text-xs sm:text-sm font-medium text-gray-200 hover:text-white transition-colors duration-300"
           >
             Support
           </a>
