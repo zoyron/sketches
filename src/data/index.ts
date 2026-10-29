@@ -11,6 +11,7 @@ import SparklingSphere from "./sketches/SparklingSphere";
 import DandelionScene from "./sketches/Dandelions";
 import BlackHole from "./sketches/BlackHole";
 import FluidSimulation from "./sketches/FluidSimulation";
+import Physarum from "./sketches/physarum/Physarum";
 
 // Homepage is separate - not part of the sketches collection
 export const homepage: Sketch = {
@@ -24,6 +25,16 @@ export const homepage: Sketch = {
 };
 
 const sketches: Sketch[] = [
+  {
+    id: "physarum",
+    title: "Physarum",
+    author: "Sagar",
+    thumbnailURL: "/sidebar/physarum.png",
+    component: Physarum,
+    description: "A swarm of slime-mould agents, each following the scent its neighbours leave behind, weaving a living labyrinth that never stops rearranging itself. Move to lay food, click to send a ripple through the colony.",
+    technologies: ["Three.js", "GLSL", "GPGPU", "Agent-based Simulation"],
+    sourceCodeUrl: "https://github.com/zoyron/sketches/blob/main/src/data/sketches/physarum/Physarum.tsx",
+  },
   {
     id: "fluid-simulation",
     title: "Fluid",
