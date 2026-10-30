@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import galaxyVertexShader from "./vertex.glsl";
 import galaxyFragmentShader from "./fragment.glsl";
 import { getOptimalParticleCount } from "../../lib/deviceLOD";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 interface GalaxyParameters {
   count: number;
@@ -21,7 +22,6 @@ interface GalaxyParameters {
 const MAX_PARTICLES = 50000;
 
 const Galaxy: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
   const [parameters] = useState<GalaxyParameters>({
     count: getOptimalParticleCount(MAX_PARTICLES),
     size: 0.005,
@@ -34,11 +34,7 @@ const Galaxy: React.FC = () => {
     outsideColor: "#05acff",
   });
 
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
-
+  const mountRef = useThreeCanvas((renderer) => {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -48,11 +44,6 @@ const Galaxy: React.FC = () => {
       100
     );
     camera.position.set(3, 4.75, 3);
-
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -164,55 +155,27 @@ const Galaxy: React.FC = () => {
       gui.addColor(parameters, "outsideColor").onChange(generateGalaxy);
     }
 
-    // Resize handler
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    };
-
-    window.addEventListener("resize", handleResize);
-
     // Animation
     const clock = new THREE.Clock();
 
-    const animate = () => {
-      const elapsedTime = clock.getElapsedTime();
+    return {
+      scene,
+      camera,
+      update() {
+        const elapsedTime = clock.getElapsedTime();
 
-      if (material) {
-        material.uniforms.uTime.value = elapsedTime;
-      }
+        if (material) {
+          material.uniforms.uTime.value = elapsedTime;
+        }
 
-      controls.update();
-      renderer.render(scene, camera);
-      animationFrameId = requestAnimationFrame(animate);
+        controls.update();
+      },
+      dispose() {
+        if (gui) gui.destroy();
+        controls.dispose();
+      },
     };
-
-    animate();
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      if (gui) gui.destroy();
-
-      // Properly dispose of Three.js resources
-      geometry?.dispose();
-      material?.dispose();
-      if (points) {
-        scene.remove(points);
-      }
-      scene.clear();
-      controls.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-    };
-  }, [parameters]);
+  });
 
   return <div ref={mountRef} />;
 };
