@@ -1,11 +1,7 @@
 import React from "react";
 import FluidBackground from "./FluidBackground";
 
-interface HomePageProps {
-  onOpenSidebar?: () => void;
-}
-
-const HomePage: React.FC<HomePageProps> = () => {
+const HomePage: React.FC = () => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-black relative overflow-hidden">
       {/* Interactive Fluid Background */}

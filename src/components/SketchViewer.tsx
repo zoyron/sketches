@@ -4,7 +4,6 @@ import LoadingAnimation from "./LoadingAnimation";
 
 interface SketchViewerProps {
   sketch: Sketch;
-  onOpenSidebar: () => void;
 }
 
 const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
