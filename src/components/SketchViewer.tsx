@@ -1,5 +1,6 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { Sketch } from "../types/Sketch";
+import InteractionHint from "./InteractionHint";
 import LoadingAnimation from "./LoadingAnimation";
 import SketchErrorBoundary from "./SketchErrorBoundary";
 
@@ -50,6 +51,7 @@ const SketchViewer: React.FC<SketchViewerProps> = ({ sketch }) => {
           >
             {isFirstLoad && <FirstLoadTimer onElapsed={finishFirstLoad} />}
             <SketchComponent />
+            {sketch.hint && <InteractionHint hint={sketch.hint} />}
           </Suspense>
         </div>
       </SketchErrorBoundary>

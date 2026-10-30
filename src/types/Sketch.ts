@@ -1,3 +1,9 @@
+// A sketch that doesn't respond to touch simply leaves out the touch text
+export interface SketchHint {
+  mouse: string;
+  touch?: string;
+}
+
 export interface Sketch {
   id: string;
   title: string;
@@ -7,6 +13,7 @@ export interface Sketch {
   description?: string;
   technologies?: string[];
   sourceCodeUrl?: string;
+  hint?: SketchHint;
 }
 
 // What a sketch declares in its own meta.ts; the rest comes from its folder
