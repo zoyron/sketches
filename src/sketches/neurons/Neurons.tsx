@@ -1,16 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getOptimalParticleCount } from "../../lib/deviceLOD";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const Neurons: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
-
+  const mountRef = useThreeCanvas((renderer) => {
     const particleVertexShader = `
       attribute float size;
       varying vec3 vColor;
@@ -42,10 +37,7 @@ const Neurons: React.FC = () => {
       1000,
     );
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000);
-    mountRef.current.appendChild(renderer.domElement);
 
     const MAX_PARTICLES = 1000;
     const particleCount = getOptimalParticleCount(MAX_PARTICLES);
@@ -159,9 +151,7 @@ const Neurons: React.FC = () => {
       return adjacent;
     };
 
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-
+    const update = () => {
       const positions = geometry.attributes.position.array;
       let lineIndex = 0;
 
@@ -240,39 +230,17 @@ const Neurons: React.FC = () => {
       lineGeometry.attributes.color.needsUpdate = true;
 
       controls.update();
-      renderer.render(scene, camera);
     };
 
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    return {
+      scene,
+      camera,
+      update,
+      dispose() {
+        controls.dispose();
+      },
     };
-
-    window.addEventListener("resize", handleResize);
-    animate();
-
-    const currentMount = mountRef.current;
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-
-      // Properly dispose of Three.js resources
-      geometry.dispose();
-      material.dispose();
-      lineGeometry.dispose();
-      lineMaterial.dispose();
-      scene.clear();
-      controls.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      if (currentMount && renderer.domElement.parentNode === currentMount) {
-        currentMount.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
+  }, { antialias: true, pixelRatio: 1 });
 
   return <div ref={mountRef} />;
 };
