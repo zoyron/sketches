@@ -1,45 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { getOptimalParticleCount } from "../../lib/deviceLOD";
-
-interface Sizes {
-  width: number;
-  height: number;
-}
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const DandelionScene: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
-
+  const mountRef = useThreeCanvas((renderer) => {
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
 
-    // Sizes
-    const sizes: Sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-
     // Camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      sizes.width / sizes.height,
+      window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
     camera.position.z = 50;
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
 
     // Shader materials
     const particleMaterial = new THREE.ShaderMaterial({
@@ -200,8 +178,7 @@ const DandelionScene: React.FC = () => {
       .fill(0)
       .map(() => (Math.random() - 0.5) * 2);
 
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+    const update = () => {
       controls.update();
 
       const time = clock.getElapsedTime();
@@ -232,11 +209,7 @@ const DandelionScene: React.FC = () => {
 
       particles.geometry.attributes.position.needsUpdate = true;
       particles.rotation.y += 0.001;
-
-      renderer.render(scene, camera);
     };
-
-    animate();
 
     // Interaction
     const raycaster = new THREE.Raycaster();
@@ -249,8 +222,8 @@ const DandelionScene: React.FC = () => {
       const clientY =
         "touches" in event ? event.touches[0].clientY : event.clientY;
 
-      mouse.x = (clientX / sizes.width) * 2 - 1;
-      mouse.y = -(clientY / sizes.height) * 2 + 1;
+      mouse.x = (clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObject(particles);
@@ -263,57 +236,19 @@ const DandelionScene: React.FC = () => {
     window.addEventListener("mousedown", handleInteraction);
     window.addEventListener("touchstart", handleInteraction);
 
-    // Resize handler
-    const handleResize = () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    return {
+      scene,
+      camera,
+      update,
+      dispose() {
+        window.removeEventListener("mousedown", handleInteraction);
+        window.removeEventListener("touchstart", handleInteraction);
+        controls.dispose();
+      },
     };
+  }, { antialias: true });
 
-    window.addEventListener("resize", handleResize);
-
-    const currentMount = mountRef.current;
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousedown", handleInteraction);
-      window.removeEventListener("touchstart", handleInteraction);
-
-      // Properly dispose of Three.js resources
-      geometry.dispose();
-      particleMaterial.dispose();
-      stemMaterial.dispose();
-      scene.clear();
-      controls.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      if (currentMount && renderer.domElement.parentNode === currentMount) {
-        currentMount.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
-
-  return (
-    <div>
-      <div ref={mountRef} />
-      <div className="absolute bottom-8 right-8 pointer-events-none">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900/40 backdrop-blur-sm border border-white/10">
-          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-          </svg>
-          <span className="text-xs sm:text-sm font-medium text-white/70 tracking-wide">
-            Click to scatter
-          </span>
-        </div>
-      </div>
-    </div>
-  );
+  return <div ref={mountRef} />;
 };
 
 export default DandelionScene;
