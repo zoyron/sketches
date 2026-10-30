@@ -1,4 +1,4 @@
-#include ./hash.glsl
+#include ../../../lib/shaders/hash.glsl
 
 uniform sampler2D uAgents;
 uniform sampler2D uTrail;

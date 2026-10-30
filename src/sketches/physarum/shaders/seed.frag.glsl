@@ -1,4 +1,4 @@
-#include ./hash.glsl
+#include ../../../lib/shaders/hash.glsl
 
 uniform float uSeed;
 
