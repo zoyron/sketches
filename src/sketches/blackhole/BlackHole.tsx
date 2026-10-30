@@ -1,19 +1,13 @@
 // The original creator of the shader code used in this visual is https://x.com/XorDev
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const BlackHole: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
+  const mountRef = useThreeCanvas((renderer) => {
     // Renderer setup
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 1);
-    mountRef.current.appendChild(renderer.domElement);
 
     // Scene and camera setup
     const scene = new THREE.Scene();
@@ -21,18 +15,14 @@ const BlackHole: React.FC = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
-    // Mouse tracking
+    // Pointer tracking
     const targetMouse = new THREE.Vector2(0.5, 0.5);
     const mouse = new THREE.Vector2(0.5, 0.5);
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!event.isPrimary) return;
       targetMouse.x = event.clientX / window.innerWidth;
       targetMouse.y = 1.0 - event.clientY / window.innerHeight;
-    };
-
-    const handleResize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
     };
 
     // Shaders
@@ -116,64 +106,32 @@ const BlackHole: React.FC = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // Animation
-    function animate() {
-      // Smoothly interpolate mouse position for fluidic interactivity
-      mouse.lerp(targetMouse, 0.05);
-
-      uniforms.time.value += 0.01;
-      uniforms.mouse.value.copy(mouse);
-      renderer.render(scene, camera);
-    }
-
-    // Set up render loop
-    let animationFrameId: number;
-    const renderLoop = () => {
-      animationFrameId = window.requestAnimationFrame(renderLoop);
-      animate();
-    };
-    renderLoop();
-
     // Event listeners
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerdown", handlePointerMove); // a tap has no move
 
-    const currentMount = mountRef.current;
+    return {
+      scene,
+      camera,
+      update() {
+        // Smoothly interpolate mouse position for fluidic interactivity
+        mouse.lerp(targetMouse, 0.05);
 
-    // Cleanup
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-      window.cancelAnimationFrame(animationFrameId);
-
-      // Properly dispose of Three.js resources
-      geometry.dispose();
-      material.dispose();
-      scene.clear();
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      if (currentMount && renderer.domElement.parentNode === currentMount) {
-        currentMount.removeChild(renderer.domElement);
-      }
+        uniforms.time.value += 0.01;
+        uniforms.mouse.value.copy(mouse);
+      },
+      resize(width, height) {
+        uniforms.resolution.value.set(width, height);
+      },
+      dispose() {
+        window.removeEventListener("pointermove", handlePointerMove);
+        window.removeEventListener("pointerdown", handlePointerMove);
+      },
     };
-  }, []);
+    // The shader measures gl_FragCoord against the resolution uniform, which is in CSS pixels
+  }, { pixelRatio: 1 });
 
-  return (
-    <>
-      <div ref={mountRef} style={{ backgroundColor: "black" }} />
-      <div className="absolute bottom-8 right-8 pointer-events-none">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900/40 backdrop-blur-sm border border-white/10">
-          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-          </svg>
-          <span className="text-xs sm:text-sm font-medium text-white/70 tracking-wide">
-            Move mouse to interact
-          </span>
-        </div>
-      </div>
-    </>
-  );
+  return <div ref={mountRef} style={{ backgroundColor: "black" }} />;
 };
 
 export default BlackHole;
