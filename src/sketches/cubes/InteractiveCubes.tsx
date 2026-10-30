@@ -1,15 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const InteractiveCubes: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
+  const mountRef = useThreeCanvas((renderer) => {
     const cubes: THREE.Mesh[] = [];
     const cursor = new THREE.Vector3();
     const oPos = new THREE.Vector3();
@@ -23,16 +19,10 @@ const InteractiveCubes: React.FC = () => {
     // Scene setup
     const scene = new THREE.Scene();
 
-    // Sizes
-    const sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-
     // Camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      sizes.width / sizes.height,
+      window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
@@ -50,12 +40,6 @@ const InteractiveCubes: React.FC = () => {
     spotLight.decay = 0;
     spotLight.castShadow = true;
     scene.add(spotLight);
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
 
     // Create cubes
     const geometry = new RoundedBoxGeometry(1, 1, 1, 2, 0.15);
@@ -82,37 +66,26 @@ const InteractiveCubes: React.FC = () => {
       }
     }
 
-    // Mouse move handler
-    const handleMouseMove = (event: MouseEvent) => {
+    // Pointer move handler
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!event.isPrimary) return;
       const mouse = new THREE.Vector2();
-      mouse.x = (event.clientX / sizes.width) * 2 - 1;
-      mouse.y = -(event.clientY / sizes.height) * 2 + 1;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       cursor.set(mouse.x, mouse.y, 0.5).unproject(camera);
       dir.copy(cursor).sub(camera.position).normalize();
       cursor.add(dir.multiplyScalar(camera.position.length()));
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-
-    // Resize handler
-    const handleResize = () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    };
-
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerdown", handlePointerMove); // a tap has no move
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
     // Animation
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+    const update = () => {
       controls.update();
 
       cubes.forEach((cube) => {
@@ -135,60 +108,21 @@ const InteractiveCubes: React.FC = () => {
           cube.position.lerp(vec, 0.2);
         }
       });
-
-      renderer.render(scene, camera);
     };
 
-    animate();
-
-    const currentMount = mountRef.current;
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-
-      // Dispose geometries
-      geometry.dispose();
-
-      // Dispose materials
-      cubes.forEach((cube) => {
-        (cube.material as THREE.MeshLambertMaterial).dispose();
-      });
-
-      // Clear scene
-      scene.clear();
-
-      // Dispose controls
-      controls.dispose();
-
-      // Dispose renderer
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      // Remove DOM element safely
-      if (currentMount && renderer.domElement.parentElement === currentMount) {
-        currentMount.removeChild(renderer.domElement);
-      }
+    return {
+      scene,
+      camera,
+      update,
+      dispose() {
+        window.removeEventListener("pointermove", handlePointerMove);
+        window.removeEventListener("pointerdown", handlePointerMove);
+        controls.dispose();
+      },
     };
-  }, []);
+  });
 
-  return (
-    <>
-      <div ref={mountRef} />
-      <div className="absolute bottom-8 right-8 pointer-events-none">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900/40 backdrop-blur-sm border border-white/10">
-          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-          </svg>
-          <span className="text-xs sm:text-sm font-medium text-white/70 tracking-wide">
-            Move mouse to interact
-          </span>
-        </div>
-      </div>
-    </>
-  );
+  return <div ref={mountRef} />;
 };
 
 export default InteractiveCubes;
