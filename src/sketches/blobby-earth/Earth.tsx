@@ -1,32 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import vertexShader from "./vertex.glsl";
 import fragmentShader from "./fragment.glsl";
 import earthmapTexture from "./earthmap1k.jpg";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const EarthSphere: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
-
+  const mountRef = useThreeCanvas((renderer) => {
     // Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
 
-    // Sizes
-    const sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-
     // Camera
     const camera = new THREE.PerspectiveCamera(
       25,
-      sizes.width / sizes.height,
+      window.innerWidth / window.innerHeight,
       0.1,
       100
     );
@@ -34,14 +23,6 @@ const EarthSphere: React.FC = () => {
     camera.position.y = 10;
     camera.position.z = 12;
     scene.add(camera);
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-    });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -66,64 +47,25 @@ const EarthSphere: React.FC = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // Handle window resize
-    const handleResize = () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    };
-
-    window.addEventListener("resize", handleResize);
-
     // Animation
     const clock = new THREE.Clock();
-    const animate = () => {
-      const elapsedTime = clock.getElapsedTime();
-      material.uniforms.uTime.value = elapsedTime;
-      mesh.rotation.y += 0.0125;
 
-      controls.update();
-      renderer.render(scene, camera);
-      animationFrameId = window.requestAnimationFrame(animate);
+    return {
+      scene,
+      camera,
+      update() {
+        const elapsedTime = clock.getElapsedTime();
+        material.uniforms.uTime.value = elapsedTime;
+        mesh.rotation.y += 0.0125;
+
+        controls.update();
+      },
+      dispose() {
+        perlinTexture.dispose();
+        controls.dispose();
+      },
     };
-
-    animate();
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-
-      // Dispose geometries
-      geometry.dispose();
-
-      // Dispose materials
-      material.dispose();
-
-      // Dispose textures
-      perlinTexture.dispose();
-
-      // Clear scene
-      scene.clear();
-
-      // Dispose controls
-      controls.dispose();
-
-      // Dispose renderer
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      // Remove DOM element safely
-      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
+  }, { antialias: true });
 
   return <div ref={mountRef} />;
 };
