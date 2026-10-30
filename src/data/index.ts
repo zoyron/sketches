@@ -1,7 +1,6 @@
 import { Sketch } from "../types/Sketch";
 import Galaxy from "./sketches/galaxy/Galaxy";
 import SparklingParticles from "./sketches/SparklingParticles";
-import HomePage from "./sketches/HomePage";
 import InteractiveCubes from "./sketches/InteractiveCubes";
 import EarthSphere from "./sketches/blobbyEarth/Earth";
 import InteractiveEarth from "./sketches/particlesEarth/InteractiveEarth";
@@ -12,17 +11,6 @@ import DandelionScene from "./sketches/Dandelions";
 import BlackHole from "./sketches/BlackHole";
 import FluidSimulation from "./sketches/FluidSimulation";
 import Physarum from "./sketches/physarum/Physarum";
-
-// Homepage is separate - not part of the sketches collection
-export const homepage: Sketch = {
-  id: "homepage",
-  title: "Welcome",
-  author: "Sagar",
-  thumbnailURL: "/sidebar/welcome.png",
-  component: HomePage,
-  description: "A welcoming gateway to the Digital Atelier, showcasing the collection of WebGL experiments.",
-  technologies: ["React", "Three.js", "React Three Fiber"],
-};
 
 const sketches: Sketch[] = [
   {
