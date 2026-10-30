@@ -1,3 +1,4 @@
+import { lazySketch } from "../lib/lazySketch";
 import { Sketch, SketchMeta } from "../types/Sketch";
 
 const REPOSITORY_URL = "https://github.com/zoyron/sketches";
@@ -13,6 +14,7 @@ const sketches: Sketch[] = Object.entries(metas)
       ...meta,
       id,
       author: meta.author ?? DEFAULT_AUTHOR,
+      component: lazySketch(meta.load),
       sourceCodeUrl: `${REPOSITORY_URL}/tree/main/src/sketches/${id}`,
     };
   })
