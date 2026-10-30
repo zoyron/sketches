@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { getOptimalParticleCount } from "../../utils/deviceLOD";
+import { getOptimalParticleCount } from "../../lib/deviceLOD";
 
 const Neurons: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);

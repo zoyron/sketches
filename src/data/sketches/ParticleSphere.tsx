@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createNoise3D } from "simplex-noise";
-import { getOptimalParticleCount } from "../../utils/deviceLOD";
+import { getOptimalParticleCount } from "../../lib/deviceLOD";
 
 const ParticleSphere: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);

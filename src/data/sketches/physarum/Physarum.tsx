@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { getDeviceCapabilities } from "../../../utils/deviceLOD";
+import { getDeviceCapabilities } from "../../../lib/deviceLOD";
 import quadVertexShader from "./shaders/quad.vert.glsl";
 import seedFragmentShader from "./shaders/seed.frag.glsl";
 import agentsFragmentShader from "./shaders/agents.frag.glsl";

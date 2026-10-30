@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
-import { getOptimalParticleCount } from "../../utils/deviceLOD";
+import { getOptimalParticleCount } from "../../lib/deviceLOD";
 
 const MAX_PARTICLES = 50000;
 
