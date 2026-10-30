@@ -14,14 +14,14 @@ This project is made using typescript. But the sketches use a lot of glsl as wel
 
 1. [Blobby Earth](https://sketches-sarlloc.vercel.app/sketch/blobby-earth)
 
-![Blobby Earth](./public/sidebar/blobbyEarth.png)
+![Blobby Earth](./src/sketches/blobby-earth/thumbnail.png)
 ___
 
 2. [Interactive Cubes](https://sketches-sarlloc.vercel.app/sketch/cubes)
 
-![Interactive Cubes](./public/sidebar/interactiveCubes.png)
+![Interactive Cubes](./src/sketches/cubes/thumbnail.png)
 ___
 
 3. [Galaxy](https://sketches-sarlloc.vercel.app/sketch/galaxy)
 
-![Galaxy](./public/sidebar/galaxy.png)
+![Galaxy](./src/sketches/galaxy/thumbnail.png)

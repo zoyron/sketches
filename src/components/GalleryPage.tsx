@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ExhibitionMenu from "./ExhibitionMenu";
 import SketchInfo from "./SketchInfo";
 import SketchViewer from "./SketchViewer";
-import sketches from "../data";
+import sketches from "../sketches";
 import homepage from "../home";
 
 const GalleryPage: React.FC = () => {

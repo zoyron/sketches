@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import galaxyVertexShader from "./vertex.glsl";
 import galaxyFragmentShader from "./fragment.glsl";
-import { getOptimalParticleCount } from "../../../lib/deviceLOD";
+import { getOptimalParticleCount } from "../../lib/deviceLOD";
 
 interface GalaxyParameters {
   count: number;
