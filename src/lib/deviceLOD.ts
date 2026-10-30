@@ -2,6 +2,8 @@
  * Utility for determining optimal rendering parameters based on device capabilities
  */
 
+import { isTouchDevice } from './isTouchDevice';
+
 export interface DeviceCapabilities {
   tier: 'low' | 'mid' | 'high';
   particleMultiplier: number;
@@ -10,11 +12,10 @@ export interface DeviceCapabilities {
 }
 
 export const getDeviceCapabilities = (): DeviceCapabilities => {
-  // Check if mobile
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // Touch-first devices cover iPads that report a desktop user agent
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || isTouchDevice();
 
-  // Get device metrics
-  const pixelRatio = window.devicePixelRatio || 1;
+  // Pixel ratio says nothing about power (a 1080p desktop is 1x), so tiers go by cores and area
   const canvasArea = window.innerWidth * window.innerHeight;
   const cores = navigator.hardwareConcurrency || 2;
 
@@ -22,13 +23,12 @@ export const getDeviceCapabilities = (): DeviceCapabilities => {
   const isLowEnd =
     isMobile ||
     cores < 4 ||
-    canvasArea < 1000000 || // Less than ~1000x1000
-    pixelRatio < 2;
+    canvasArea < 1000000; // Less than ~1000x1000
 
   // Detect mid-range devices
   const isMidRange =
     !isLowEnd &&
-    (cores < 8 || canvasArea < 2000000 || pixelRatio < 3);
+    (cores < 8 || canvasArea < 2000000);
 
   // Determine tier
   if (isLowEnd) {
