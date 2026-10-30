@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import * as THREE from "three";
 import { getDeviceCapabilities } from "../../lib/deviceLOD";
+import { isTouchDevice } from "../../lib/isTouchDevice";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 import quadVertexShader from "../../lib/shaders/fullscreen.vert.glsl";
 import seedFragmentShader from "./shaders/seed.frag.glsl";
 import agentsFragmentShader from "./shaders/agents.frag.glsl";
@@ -66,25 +68,16 @@ interface Ripple {
 }
 
 const Physarum: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
   const reseedRef = useRef<(() => void) | null>(null);
-  const [isTouch] = useState(() => window.matchMedia("(hover: none)").matches);
+  const [isTouch] = useState(isTouchDevice);
   const hint = isTouch ? "Drag to feed · Tap to ripple" : "Move to feed · Click to ripple";
 
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-
-    let animationFrameId: number;
+  const mountRef = useThreeCanvas((renderer) => {
     const { tier } = getDeviceCapabilities();
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({ powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
     renderer.autoClear = false;
-    mount.appendChild(renderer.domElement);
     const canvas = renderer.domElement;
 
     // Agents need full floats for sub-pixel steps; the trail only needs half floats, which can also be blended
@@ -414,7 +407,6 @@ const Physarum: React.FC = () => {
 
     // Resizing resamples the trail into a new map; agent positions are normalised so they carry over
     const handleResize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
       const nextSize = computeMapSize();
       if (nextSize.equals(mapSize)) return;
 
@@ -479,7 +471,6 @@ const Physarum: React.FC = () => {
     let accumulator = 0;
 
     const tick = (now: number) => {
-      animationFrameId = requestAnimationFrame(tick);
       const delta = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
@@ -522,49 +513,45 @@ const Physarum: React.FC = () => {
       displayMaterial.uniforms.uBloom.value = renderBloom(trail).texture;
       displayMaterial.uniforms.uFade.value = fade * fade * (3 - 2 * fade);
       displayMaterial.uniforms.uFrame.value = frame;
-      renderPass(displayMaterial, null);
     };
-    animationFrameId = requestAnimationFrame(tick);
 
     canvas.addEventListener("pointermove", updatePointer);
     canvas.addEventListener("pointerdown", handlePointerDown);
     canvas.addEventListener("pointerup", handlePointerUp);
     canvas.addEventListener("pointerleave", handlePointerLeave);
     canvas.addEventListener("pointercancel", handlePointerLeave);
-    window.addEventListener("resize", handleResize);
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      canvas.removeEventListener("pointermove", updatePointer);
-      canvas.removeEventListener("pointerdown", handlePointerDown);
-      canvas.removeEventListener("pointerup", handlePointerUp);
-      canvas.removeEventListener("pointerleave", handlePointerLeave);
-      canvas.removeEventListener("pointercancel", handlePointerLeave);
-      window.removeEventListener("resize", handleResize);
-      reseedRef.current = null;
+    return {
+      update: tick,
+      render() {
+        renderPass(displayMaterial, null);
+      },
+      resize: handleResize,
+      dispose() {
+        canvas.removeEventListener("pointermove", updatePointer);
+        canvas.removeEventListener("pointerdown", handlePointerDown);
+        canvas.removeEventListener("pointerup", handlePointerUp);
+        canvas.removeEventListener("pointerleave", handlePointerLeave);
+        canvas.removeEventListener("pointercancel", handlePointerLeave);
+        reseedRef.current = null;
 
-      // Properly dispose of Three.js resources
-      [...agentTargets, ...trailTargets, ...bloomTargets].forEach((target) => target.dispose());
-      [
-        seedMaterial,
-        agentsMaterial,
-        depositMaterial,
-        trailMaterial,
-        downsampleMaterial,
-        blurMaterial,
-        displayMaterial,
-        copyMaterial,
-      ].forEach((material) => material.dispose());
-      quadGeometry.dispose();
-      agentGeometry.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      if (canvas.parentNode === mount) {
-        mount.removeChild(canvas);
-      }
+        // Properly dispose of Three.js resources
+        [...agentTargets, ...trailTargets, ...bloomTargets].forEach((target) => target.dispose());
+        [
+          seedMaterial,
+          agentsMaterial,
+          depositMaterial,
+          trailMaterial,
+          downsampleMaterial,
+          blurMaterial,
+          displayMaterial,
+          copyMaterial,
+        ].forEach((material) => material.dispose());
+        quadGeometry.dispose();
+        agentGeometry.dispose();
+      },
     };
-  }, []);
+  }, { powerPreference: "high-performance" });
 
   return (
     <>
