@@ -1,16 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createNoise3D } from "simplex-noise";
 import { getOptimalParticleCount } from "../../lib/deviceLOD";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
 
 const ParticleSphere: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    let animationFrameId: number;
+  const mountRef = useThreeCanvas((renderer) => {
     const noise3D = createNoise3D();
     let particles: THREE.Points;
     const MAX_PARTICLES = 20000;
@@ -20,27 +16,15 @@ const ParticleSphere: React.FC = () => {
     // Scene setup
     const scene = new THREE.Scene();
 
-    // Sizes
-    const sizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-
     // Camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      sizes.width / sizes.height,
+      window.innerWidth / window.innerHeight,
       0.1,
       1000,
     );
     camera.position.set(5, 5, 8);
     scene.add(camera);
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
 
     // Create particle system
     const createParticleSystem = () => {
@@ -122,8 +106,7 @@ const ParticleSphere: React.FC = () => {
     controls.maxDistance = 20;
 
     // Animation
-    const animate = (time: number) => {
-      animationFrameId = requestAnimationFrame(animate);
+    const update = (time: number) => {
       controls.update();
 
       // Add rotation to particles and wireframe
@@ -176,53 +159,17 @@ const ParticleSphere: React.FC = () => {
       }
 
       particles.geometry.attributes.position.needsUpdate = true;
-
-      renderer.render(scene, camera);
     };
 
-    animate(0);
-
-    // Resize handler
-    const handleResize = () => {
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    return {
+      scene,
+      camera,
+      update,
+      dispose() {
+        controls.dispose();
+      },
     };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-
-      // Dispose geometries
-      particles.geometry.dispose();
-      wireframeGeometry.dispose();
-
-      // Dispose materials
-      (particles.material as THREE.PointsMaterial).dispose();
-      wireframeMaterial.dispose();
-
-      // Clear scene
-      scene.clear();
-
-      // Dispose controls
-      controls.dispose();
-
-      // Dispose renderer
-      renderer.dispose();
-      renderer.forceContextLoss();
-
-      // Remove DOM element safely
-      if (mountRef.current && renderer.domElement.parentElement === mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
+  }, { antialias: true });
 
   return <div ref={mountRef} />;
 };
