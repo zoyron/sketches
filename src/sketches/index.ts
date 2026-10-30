@@ -5,7 +5,7 @@ const REPOSITORY_URL = "https://github.com/zoyron/sketches";
 const DEFAULT_AUTHOR = "Sagar";
 
 // Every folder here with a meta.ts is a sketch, and its name is the sketch's URL id
-const metas = import.meta.glob<SketchMeta>("./*/meta.ts", { eager: true, import: "default" });
+const metas = import.meta.glob<SketchMeta>(["./*/meta.ts", "!./_template/*"], { eager: true, import: "default" });
 
 const sketches: Sketch[] = Object.entries(metas)
   .map(([path, meta]) => {
