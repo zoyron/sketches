@@ -1,0 +1,248 @@
+import React from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { getOptimalParticleCount } from "../../lib/deviceLOD";
+import { useThreeCanvas } from "../../lib/useThreeCanvas";
+
+const Neurons: React.FC = () => {
+  const mountRef = useThreeCanvas((renderer) => {
+    const particleVertexShader = `
+      attribute float size;
+      varying vec3 vColor;
+      void main() {
+          vColor = color;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = size * (400.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+
+    const particleFragmentShader = `
+      varying vec3 vColor;
+      void main() {
+          float r = length(gl_PointCoord - vec2(0.5, 0.5));
+          if (r > 0.5) discard;
+          float alpha = smoothstep(0.5, 0.0, r);
+          gl_FragColor = vec4(vColor, alpha);
+      }
+    `;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+
+    renderer.setClearColor(0x000000);
+
+    const MAX_PARTICLES = 1000;
+    const particleCount = getOptimalParticleCount(MAX_PARTICLES);
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const velocities = new Float32Array(particleCount * 3);
+
+    const geometry = new THREE.BufferGeometry();
+    const maxDistance = 6;
+
+    const colorPalette = [
+      [1, 0.7, 0.7],
+      [0.7, 0.7, 1],
+      [1, 1, 0.7],
+      [0.7, 1, 0.7],
+      [1, 0.7, 1],
+      [0.7, 1, 1],
+    ];
+
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
+      const radius = 20 + Math.random() * 20;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI;
+
+      positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      positions[i3 + 2] = radius * Math.cos(phi);
+
+      const color =
+        colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      colors[i3] = color[0];
+      colors[i3 + 1] = color[1];
+      colors[i3 + 2] = color[2];
+
+      sizes[i] = 0.5 + Math.random() * 0.5;
+
+      velocities[i3] = (Math.random() - 0.5) * 0.06;
+      velocities[i3 + 1] = (Math.random() - 0.5) * 0.06;
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.06;
+    }
+
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader: particleVertexShader,
+      fragmentShader: particleFragmentShader,
+      vertexColors: true,
+      transparent: true,
+    });
+
+    const particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+
+    const maxConnections = particleCount * 2;
+    const linePositions = new Float32Array(maxConnections * 6);
+    const lineColors = new Float32Array(maxConnections * 6);
+    const lineGeometry = new THREE.BufferGeometry();
+
+    lineGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(linePositions, 3),
+    );
+    lineGeometry.setAttribute(
+      "color",
+      new THREE.BufferAttribute(lineColors, 3),
+    );
+
+    const lineMaterial = new THREE.LineBasicMaterial({
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.25,
+      blending: THREE.AdditiveBlending,
+    });
+
+    const lineSystem = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lineSystem);
+
+    camera.position.z = 61;
+
+    // Add OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+
+
+    // Spatial grid for optimized distance checks
+    const GRID_SIZE = maxDistance;
+    const spatialGrid = new Map<string, number[]>();
+
+    const getCellKey = (x: number, y: number, z: number): string => {
+      const cellX = Math.floor(x / GRID_SIZE);
+      const cellY = Math.floor(y / GRID_SIZE);
+      const cellZ = Math.floor(z / GRID_SIZE);
+      return `${cellX},${cellY},${cellZ}`;
+    };
+
+    const getAdjacentCells = (key: string): string[] => {
+      const [x, y, z] = key.split(',').map(Number);
+      const adjacent: string[] = [];
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dz = -1; dz <= 1; dz++) {
+            adjacent.push(`${x + dx},${y + dy},${z + dz}`);
+          }
+        }
+      }
+      return adjacent;
+    };
+
+    const update = () => {
+      const positions = geometry.attributes.position.array;
+      let lineIndex = 0;
+
+      scene.rotation.y += 0.00075;
+
+      // Update particle positions
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+
+        positions[i3] += velocities[i3];
+        positions[i3 + 1] += velocities[i3 + 1];
+        positions[i3 + 2] += velocities[i3 + 2];
+
+        for (let j = 0; j < 3; j++) {
+          if (Math.abs(positions[i3 + j]) > 25) {
+            velocities[i3 + j] *= -0.8;
+          }
+        }
+      }
+
+      // Build spatial grid
+      spatialGrid.clear();
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const key = getCellKey(positions[i3], positions[i3 + 1], positions[i3 + 2]);
+        if (!spatialGrid.has(key)) {
+          spatialGrid.set(key, []);
+        }
+        spatialGrid.get(key)!.push(i);
+      }
+
+      // Check connections using spatial grid (optimized)
+      const checked = new Set<string>();
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const cellKey = getCellKey(positions[i3], positions[i3 + 1], positions[i3 + 2]);
+        const adjacentCells = getAdjacentCells(cellKey);
+
+        for (const adjKey of adjacentCells) {
+          const nearbyParticles = spatialGrid.get(adjKey);
+          if (!nearbyParticles) continue;
+
+          for (const j of nearbyParticles) {
+            if (i >= j) continue; // Skip duplicates and self
+
+            const pairKey = `${i},${j}`;
+            if (checked.has(pairKey)) continue;
+            checked.add(pairKey);
+
+            const j3 = j * 3;
+            const dx = positions[i3] - positions[j3];
+            const dy = positions[i3 + 1] - positions[j3 + 1];
+            const dz = positions[i3 + 2] - positions[j3 + 2];
+            const distSq = dx * dx + dy * dy + dz * dz;
+
+            if (distSq < maxDistance * maxDistance && lineIndex < maxConnections * 6) {
+              linePositions[lineIndex] = positions[i3];
+              linePositions[lineIndex + 1] = positions[i3 + 1];
+              linePositions[lineIndex + 2] = positions[i3 + 2];
+              linePositions[lineIndex + 3] = positions[j3];
+              linePositions[lineIndex + 4] = positions[j3 + 1];
+              linePositions[lineIndex + 5] = positions[j3 + 2];
+
+              for (let k = 0; k < 6; k++) {
+                lineColors[lineIndex + k] = 0.8;
+              }
+
+              lineIndex += 6;
+            }
+          }
+        }
+      }
+
+      geometry.attributes.position.needsUpdate = true;
+      lineGeometry.attributes.position.needsUpdate = true;
+      lineGeometry.attributes.color.needsUpdate = true;
+
+      controls.update();
+    };
+
+    return {
+      scene,
+      camera,
+      update,
+      dispose() {
+        controls.dispose();
+      },
+    };
+  }, { antialias: true, pixelRatio: 1 });
+
+  return <div ref={mountRef} />;
+};
+
+export default Neurons;

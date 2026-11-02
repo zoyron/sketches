@@ -19,6 +19,12 @@ export default {
         'heading': ['Playfair Display', 'serif'],
         'body': ['Inter', 'sans-serif'],
       },
+      keyframes: {
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+      },
     },
   },
   plugins: [],

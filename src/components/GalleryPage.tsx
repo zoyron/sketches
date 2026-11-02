@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import ExhibitionMenu from "./ExhibitionMenu";
 import SketchInfo from "./SketchInfo";
 import SketchViewer from "./SketchViewer";
-import sketches, { homepage } from "../data";
+import sketches from "../sketches";
+import homepage from "../home";
 
 const GalleryPage: React.FC = () => {
   const [isLensOpen, setIsLensOpen] = useState(false);
@@ -47,7 +48,7 @@ const GalleryPage: React.FC = () => {
   return (
     <div className="relative h-screen overflow-hidden bg-noir">
       {/* Full-Screen Sketch Viewer */}
-      <SketchViewer sketch={currentSketch} onOpenSidebar={() => setIsLensOpen(true)} />
+      <SketchViewer sketch={currentSketch} />
 
       {/* Menu Button (Top-Right) - Always show */}
       <button
